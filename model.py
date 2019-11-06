@@ -11,64 +11,68 @@ class User(db.Model):
     __tablename__ = "users"
 
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    fname = db.Column(db.String(20), nullable = True)
-    lname = db.Column(db.String(20), nullable = True)
-    email = db.Column(db.String(30), nullable = True)
+    fname = db.Column(db.String(20), nullable=True)
+    lname = db.Column(db.String(20), nullable=True)
+    email = db.Column(db.String(30), nullable=True)
+
+    companies = db.relationship("Company",
+                                backref="users",
+                                secondary="user_companies")
 
     def __repr__(self):
         """Provide user's information in a helpful format"""
+
         return f"<User user_id={self.user_id} first_name={self.fname} last_name={self.lname}>"
+
 
 class Company(db.Model):
     """Create companies table"""
 
-    __tablename__ = 'companies'
+    __tablename__ = "companies"
 
-    ticker = db.Column(db.String(10), primary_key = True, unique=True)
-    name = db.Column(db.String(10), nullable=False)
+    ticker = db.Column(db.String(5), primary_key=True)
+    name = db.Column(db.String, nullable=False)
 
     def __repr__(self):
 
         return f"<Company ticker={self.ticker} company_name={self.name}>"
-    
+
+
 class User_Company(db.Model):
     """Create user_comapny tables to establish relationship"""
 
-    __tablename__ = 'user_companies'
+    __tablename__ = "user_companies"
 
-    main_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), index=True)
-    ticker = db.Column(db.String(10),db.ForeignKey('companies.ticker'), index=True)
-
-    #Define the relationship to User
-
-    user = db.relationship('User', backref = "user_companies")
-
-    company = db.relationship('Company', backref = "user_companies")
+    user_comp_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
+    ticker = db.Column(db.String(10),db.ForeignKey("companies.ticker"))
 
     def __repr__(self):
 
         return f"<User_Company main_id={self.main_id} user_id={self.user_id} ticker={self.ticker}>"
 
-class Daily_Price(db.Model):
+
+class DailyPrice(db.Model):
     """Create prices tables """
 
-    __tablename__ = 'prices'
+    __tablename__ = "daily_prices"
 
     price_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    ticker = db.Column(db.String(10), db.ForeignKey('companies.ticker'), unique=True)
+    ticker = db.Column(db.String(5),
+                       db.ForeignKey("companies.ticker"))
     date = db.Column(db.DateTime)
-    open_p = db.Column(db.Integer, nullable = True)
-    high_p = db.Column(db.Integer, nullable = True)
-    low_p = db.Column(db.Integer, nullable = True)
-    close_p = db.Column(db.Integer, nullable = True)
-    volume_p = db.Column(db.Integer, nullable = True)
+    open_p = db.Column(db.Float, nullable=True)
+    high_p = db.Column(db.Float, nullable=True)
+    low_p = db.Column(db.Float, nullable=True)
+    close_p = db.Column(db.Float, nullable=True)
+    volume_p = db.Column(db.Float, nullable=True)
 
-    company = db.relationship('Company', backref = "prices")
+    company = db.relationship("Company", backref="daily_prices")
 
     def __repr__(self): 
 
         return f"<Daily_Price close_p={self.close_p} volume_p={self.volume_p}>"
+
 
 ##############################################################################
 # Helper functions
@@ -77,7 +81,7 @@ def connect_to_db(app):
     """Connect the database to our Flask app."""
 
     # Configure to use our PostgreSQL database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///database'
+    app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql:///database"
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_ECHO'] = True
     db.app = app
