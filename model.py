@@ -1,7 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
 
-app = Flask(__name__)
 
 db = SQLAlchemy()
 
@@ -30,7 +29,7 @@ class Company(db.Model):
 
     __tablename__ = "companies"
 
-    ticker = db.Column(db.String(5), primary_key=True)
+    ticker = db.Column(db.String(4), primary_key=True)
     name = db.Column(db.String, nullable=False)
 
     def __repr__(self):
@@ -58,7 +57,7 @@ class DailyPrice(db.Model):
     __tablename__ = "daily_prices"
 
     price_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    ticker = db.Column(db.String(5),
+    ticker = db.Column(db.String(4),
                        db.ForeignKey("companies.ticker"))
     date = db.Column(db.DateTime)
     open_p = db.Column(db.Float, nullable=True)
@@ -81,7 +80,7 @@ def connect_to_db(app):
     """Connect the database to our Flask app."""
 
     # Configure to use our PostgreSQL database
-    app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql:///database"
+    app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql:///stocks"
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_ECHO'] = True
     db.app = app
@@ -91,7 +90,7 @@ if __name__ == "__main__":
     # As a convenience, if we run this module interactively, it will leave
     # you in a state of being able to work with the database directly.
 
-    # from server import app
+    from server import app
 
-    # connect_to_db(app)
+    connect_to_db(app)
     print("Connected to DB.")
