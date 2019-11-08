@@ -1,11 +1,34 @@
 {% extends 'base.html' %}
 
-{% block title %}Melon Sales{% endblock %}
+{% block title %} {% endblock %}
 
 
 {% block content %}
+  <!-- Create a drop out which has a list of companies
+  When users click on the comany, the company's chart will show up -->
 
-  <div class="company">
+<!DOCTYPE html>
+<html>
+<body>
+
+<select>
+  <option value="PayPal">PayPal</option>
+  <option value="NVDA">NVDA</option>
+  <option value="CRM">Salesforce</option>
+  <option value="TWLO">Twilio</option>
+  <option value="AAPL">Apple</option>
+  <option value="SQ">SQ</option>
+  <option value="BA">BA</option>
+  <option value="SHOP">SHOP</option> 
+</select>
+ 
+
+</body>
+</html>
+
+
+
+  <div class="Company">
     <canvas id="lineChart"></canvas>
     <div id="lineLegend" class="chart-legend"></div>
   </div>
