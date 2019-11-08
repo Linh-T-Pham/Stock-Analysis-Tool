@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Melon Sales{% endblock %}
+
+
+{% block content %}
+
+  <div class="company">
+    <canvas id="lineChart"></canvas>
+    <div id="lineLegend" class="chart-legend"></div>
+  </div>
+
+  <script>
+    const options = {
+      responsive: true
+    };
+
+    let ctx_line = $("#lineChart").get(0).getContext("2d");
+
+    $.get("/chart.json", function (data) {
+      let compChart = Chart.Line(ctx_line, {
+                                    data: data,
+                                    options: options
+                                });
+      $("#lineLegend").html(compChart.generateLegend());
+    });
+
+  </script>
+
+{% endblock %}
