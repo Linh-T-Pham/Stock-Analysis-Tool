@@ -4,28 +4,23 @@
 
 
 {% block content %}
-  <!-- Create a drop out which has a list of companies
-  When users click on the comany, the company's chart will show up -->
 
+<br>
 <!DOCTYPE html>
 <html>
 <body>
+<form id="chart-form">
+  <select name="comp" id="comp-field" >
+    <option value="PYPl">Paypal</option>
+    <option value="NVDA">Nvidia</option>
+    <option value="CRM">Salesforce</option>
+    <option value="TWLO">Twilio</option>
+    <option value="AAPL">Apple</option>
+    <option value="MSFT">Microsoft</option>
+  </select>
+  <input type="submit" value="Submit" id="ticker-submit">
 
-<select>
-  <option value="PayPal">PayPal</option>
-  <option value="NVDA">NVDA</option>
-  <option value="CRM">Salesforce</option>
-  <option value="TWLO">Twilio</option>
-  <option value="AAPL">Apple</option>
-  <option value="SQ">SQ</option>
-  <option value="BA">BA</option>
-  <option value="SHOP">SHOP</option> 
-</select>
- 
-
-</body>
-</html>
-
+</form>
 
 
   <div class="Company">
@@ -40,7 +35,7 @@
 
     let ctx_line = $("#lineChart").get(0).getContext("2d");
 
-    $.get("/chart.json", function (data) {
+    $.get("/chart.json", (data) => {
       let compChart = Chart.Line(ctx_line, {
                                     data: data,
                                     options: options
@@ -48,6 +43,21 @@
       $("#lineLegend").html(compChart.generateLegend());
     });
 
+    $('#chart-form').on('submit', (evt) => {
+      evt.preventDefault();
+
+      const formInputs = $('#chart-form').serialize();
+      $.get("/chart.json", formInputs, (data) => {
+      let compChart = Chart.Line(ctx_line, {
+                                    data: data,
+                                    options: options
+                                });
+      $("#lineLegend").html(compChart.generateLegend());
+    });
+    });
+
   </script>
+</body>
+</html>
 
 {% endblock %}
