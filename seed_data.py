@@ -28,10 +28,7 @@ def load_company():
                 "NVDA": "Nvidia",
                 "CRM" : "Salesforce", 
                 "TWLO": "Twilio",
-                "AAPL" : "Apple",
-                "SQ" : "Square",
-                "BA": "Boeing",
-                "SHOP": "Shopify" }
+                "AAPL" : "Apple" }
                
 
     for ticker, name in name_dict.items():
@@ -60,35 +57,6 @@ def load_company():
             company.daily_prices.append(daily_price)
     
         db.session.commit()
-
-    
-
-
-# def load_users_company(ticker):
-  
-#     data_by_ticker = request_api(ticker)
-    
-
-#     user_company = User_Company(user_company_id=user_company_id,
-#                                 user_id=user_id,
-#                                 ticker=ticker)
- 
-
-    # db.session.add(user_company)
-    
-    # db.session.commit()
-
-
-
-def load_DailyPrice(ticker):
-    """Load daily price by ticker into dailyprice table """
-
-    data_by_ticker = request_api(ticker)
-#     # print(data_by_ticker)
-
-# load_DailyPrice('BA')
-
-    """Define columns'values for DailyPrice table"""
 
 
 
