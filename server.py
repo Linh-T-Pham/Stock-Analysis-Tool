@@ -7,8 +7,6 @@ from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, User_Company, Company, DailyPrice
 
 
-
-
 app = Flask(__name__)
 
 # Required to use Flask sessions and the debug toolbar
@@ -16,7 +14,6 @@ app.secret_key = "ABC"
 
 
 app.jinja_env.undefined = StrictUndefined
-
 
 
 @app.route('/')
@@ -30,7 +27,7 @@ def index():
 def get_chart():
    
     ticker = request.args.get('comp')
-    print("\n\n\n\n", ticker)
+ 
     
     tickers = DailyPrice.query.filter_by(ticker=ticker).all()
   
@@ -48,7 +45,7 @@ def get_chart():
         "labels": dates,
         "datasets": [
             {
-                # "label": "Microsoft",
+                "label": "Daily Price from Jan, 2019 to Present",
                 "fill": True,
                 "lineTension": 0.5,
                 "backgroundColor": "rgba(151,187,205,0.2)",
@@ -72,6 +69,40 @@ def get_chart():
     
     return jsonify(data_dict)
  
+@app.route('/variation.json')
+def daily_price_variation():
+
+    ticker = request.args.get('comp')
+
+    tickers = DailyPrice.query.filter_by(ticker="AAPL").all()
+
+    """Return daily price variation in percentage"""
+    dates = []
+    per_daily_price_list = []
+
+    for t in tickers:
+        per = round(((float(t.open_p - t.close_p)/abs(t.open_p))*100),2)
+        per_daily_price_list.append(per)
+        dates.append(t.date)
+      
+
+    data_dict = {
+        "labels": dates,
+        "datasets": [
+            {
+                # "label": "Daily Price from Jan, 2019 to Present",
+                "barPercentage": 0.5,
+                "barThickness" :2,
+                "maxBarThickness": 3,
+                "minBarLength":1,
+                "data":per_daily_price_list,
+               }
+        ]
+    }
+
+    return jsonify(data_dict)
+
+
 
 
 
