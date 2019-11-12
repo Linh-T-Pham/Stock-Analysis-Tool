@@ -5,6 +5,7 @@ from flask import Flask, render_template, request, flash, redirect, sessions, js
 from flask_debugtoolbar import DebugToolbarExtension
 
 from model import connect_to_db, db, User, User_Company, Company, DailyPrice
+import datetime 
 
 
 app = Flask(__name__)
@@ -28,24 +29,24 @@ def get_chart():
    
     ticker = request.args.get('comp')
  
-    
+
     tickers = DailyPrice.query.filter_by(ticker=ticker).all()
   
 
     dates = []
     close_prices = []
     for t in tickers: 
-        dates.append(t.date)
+        dates.append(t.date.year)
         close_prices.append(t.close_p)
 
     dates.reverse()
     close_prices.reverse()
 
+
     data_dict = {
         "labels": dates,
-        "datasets": [
-            {
-                "label": "Daily Price from Jan, 2019 to Present",
+        "datasets": [{
+                "label": "DAILY PRICE FROM JAN, 2019 TO PRESENT",
                 "fill": True,
                 "lineTension": 0.5,
                 "backgroundColor": "rgba(151,187,205,0.2)",
@@ -63,18 +64,32 @@ def get_chart():
                 "pointHoverBorderWidth": 2,
                 "pointHitRadius": 5,
                 "data": close_prices,
-                "spanGaps": False}
-        ]
+                "spanGaps": False }]
+
     }
-    
+
+    # options: {
+    #     scales: {
+    #         yAxes: [{
+    #             ticks: {
+    #                 display: false
+    #              }
+    #         }]
+    #     }
+    # }
+
+          
+
+
+  
     return jsonify(data_dict)
  
 @app.route('/variation.json')
 def daily_price_variation():
 
     ticker = request.args.get('comp')
-
-    tickers = DailyPrice.query.filter_by(ticker="AAPL").all()
+    print(ticker)
+    tickers = DailyPrice.query.filter_by(ticker=ticker).all()
 
     """Return daily price variation in percentage"""
     dates = []
@@ -90,7 +105,7 @@ def daily_price_variation():
         "labels": dates,
         "datasets": [
             {
-                # "label": "Daily Price from Jan, 2019 to Present",
+                "label": "Daily Price Variation in Percentage",
                 "barPercentage": 0.5,
                 "barThickness" :2,
                 "maxBarThickness": 3,
