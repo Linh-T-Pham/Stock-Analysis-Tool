@@ -22,6 +22,8 @@
 
 </form>
 
+<h2> Dashboard </h2>
+
 
   <div class="Company">
     <canvas id="lineChart"></canvas>
@@ -42,14 +44,18 @@
     // Make Line Chart of daily stock prices
     let ctx_line = $("#lineChart").get(0).getContext("2d");
 
-    $.get("/chart.json", (data) => {
-      let compChart = Chart.Line(ctx_line, {
-                                    data: data,
-                                    options: options
-                                });
 
-      $("#lineLegend").html(compChart.generateLegend());
-    });
+  
+    let ctx_bar = $("#BarChart").get(0).getContext("2d");
+
+    // $.get("/chart.json", (data) => {
+    //   let compChart = Chart.Line(ctx_line, {
+    //                                 data: data,
+    //                                 options: options
+    //                             });
+
+    //   $("#lineLegend").html(compChart.generateLegend());
+    // });
 
     $('#chart-form').on('submit', (evt) => {
       evt.preventDefault();
@@ -62,24 +68,24 @@
                                     options: options
                                 });
       $("#lineLegend").html(compChart.generateLegend());
+  });
+
+      $.get("/variation.json", formInputs, (data) => {
+      let myBarChart = Chart.Bar(ctx_bar, {
+                                    type: "bar",
+                                    data: data,
+                                    options: options
+                                });
+      $("#BarLegend").html(myBarChart.generateLegend());
+
+
+  
     });
-    });
 
+});
 
-
-
-
-    // Make chart to show daily price variation 
+  
     // let ctx_line = $("#BarChart").get(0).getContext("2d");
-
-    // $.get("/variation.json", (data) => {
-    //   let myBarChart = Chart.Line(ctx_line, {
-    //                                 data: data,
-    //                                 options: options
-    //                             });
-
-    //   $("#BarLegend").html(myBarChart.generateLegend());
-    // });
 
     // $('#chart-form').on('submit', (evt) => {
     //   evt.preventDefault();
@@ -87,22 +93,14 @@
     //   const formInputs = $('#chart-form').serialize();
 
     //   $.get("/variation.json", formInputs, (data) => {
-    //   let myBarChart = Chart.Line(ctx_line, {
+    //   let myBarChart = new Chart(ctx_bar, {
+    //                                 type: "bar",
     //                                 data: data,
     //                                 options: options
     //                             });
     //   $("#BarLegend").html(myBarChart.generateLegend());
     // });
     // });
-
-
-
-
-
-
-
-
-
 
 
 
