@@ -42,45 +42,10 @@ def get_chart():
     dates.reverse()
     close_prices.reverse()
 
-
     data_dict = {
-        "labels": dates,
-        "datasets": [{
-                "label": "DAILY PRICE FROM JAN, 2019 TO PRESENT",
-                "fill": True,
-                "lineTension": 0.5,
-                "backgroundColor": "rgba(151,187,205,0.2)",
-                "borderColor": "rgba(151,187,205,1)",
-                "borderCapStyle": 'butt',
-                "borderDash": [],
-                "borderDashOffset": 0.0,
-                "borderJoinStyle": 'miter',
-                "pointBorderColor": "rgba(151,187,205,1)",
-                "pointBackgroundColor": "#fff",
-                "pointBorderWidth": 1,
-                "pointHoverRadius": 10,
-                "pointHoverBackgroundColor": "#fff",
-                "pointHoverBorderColor": "rgba(151,187,205,1)",
-                "pointHoverBorderWidth": 2,
-                "pointHitRadius": 5,
-                "data": close_prices,
-                "spanGaps": False }]
-
+        "dates": dates,
+        "close_prices": close_prices
     }
-
-    # options: {
-    #     scales: {
-    #         yAxes: [{
-    #             ticks: {
-    #                 display: false
-    #              }
-    #         }]
-    #     }
-    # }
-
-          
-
-
   
     return jsonify(data_dict)
  
@@ -88,7 +53,7 @@ def get_chart():
 def daily_price_variation():
 
     ticker = request.args.get('comp')
-    print(ticker)
+
     tickers = DailyPrice.query.filter_by(ticker=ticker).all()
 
     """Return daily price variation in percentage"""

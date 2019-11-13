@@ -22,9 +22,6 @@
 
 </form>
 
-<h2> Dashboard </h2>
-
-
   <div class="Company">
     <canvas id="lineChart"></canvas>
     <div id="lineLegend" class="chart-legend"></div>
@@ -37,16 +34,48 @@
   </div>
 
   <script>
+
     const options = {
-      responsive: true
+      responsive: true,
+      scales: {
+        yAxes: [{
+          ticks: {
+            frontFamily: "Roboto Mono",
+            frontcolor: "#556F7B",
+            frontStyle: "bold",
+            beginatZero: true,
+            maxTicksLimit: 5,
+            padding:20
+          },
+          gridLines: {
+            display: false,
+            drawTicks: false,
+            drawBorder: false
+          }
+        }],
+        xAxes: [{
+          gridLines: {
+            display: false,
+            drawTicks: false,
+            drawBorder: false
+          }
+        }]
+      }
     };
 
+    const lineChartEl = $("#lineChart").get(0);
+
     // Make Line Chart of daily stock prices
-    let ctx_line = $("#lineChart").get(0).getContext("2d");
+    const ctxLine = lineChartEl.getContext("2d");  
+    const ctx_bar = $("#BarChart").get(0).getContext("2d");
 
-
-  
-    let ctx_bar = $("#BarChart").get(0).getContext("2d");
+    const lineWidth = lineChartEl.width;
+    const lineHeight = lineChartEl.height;
+    const lineGradient = ctxLine.createLinearGradient(
+      0, 0, lineWidth, lineHeight
+    );
+    lineGradient.addColorStop(0.5, "#ff00a5");
+    lineGradient.addColorStop(1, "#ffa500");
 
     // $.get("/chart.json", (data) => {
     //   let compChart = Chart.Line(ctx_line, {
@@ -62,13 +91,27 @@
 
       const formInputs = $('#chart-form').serialize();
 
-      $.get("/chart.json", formInputs, (data) => {
-      let compChart = Chart.Line(ctx_line, {
-                                    data: data,
-                                    options: options
-                                });
-      $("#lineLegend").html(compChart.generateLegend());
-  });
+      $.get("/chart.json", formInputs, (dataFrmServer) => {
+        console.log(dataFrmServer);
+
+        const compChart = Chart.Line(
+          ctxLine, {
+            data: {
+              labels: dataFrmServer.dates,
+              datasets: [{
+                borderColor: lineGradient,
+                pointBackgroundColor: lineGradient,
+                fill: false,
+                borderWidth: 1,
+                data: dataFrmServer.close_prices
+              }]
+            },
+            options: options
+          }
+        );
+
+        $("#lineLegend").html(compChart.generateLegend());
+      });
 
       $.get("/variation.json", formInputs, (data) => {
       let myBarChart = Chart.Bar(ctx_bar, {
