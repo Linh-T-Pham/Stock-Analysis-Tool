@@ -99,14 +99,41 @@ def login_create():
     email = request.form["email"]
     fname = request.form["firstname"]
     lname = request.form["lastname"]
+    password = request.form["password"]
 
-    if not user:
-        flash("No such user")
-        return redirect("/login")
+    new_user = User(email=email, fname=fname, lname=lname, password=password)
+
+    db.session.add(new_user)
+    db.session.commit()
+
+    return render_template('/')
 
 
 
+    
 
+    # if not user 
+    #     flash("No such user")
+    #     return redirect("/login")
+
+    # session["user_id"] = user.user_id
+
+    # flash("Logged in")
+    # return redirect(f"/users/{user.user_id}")
+
+
+@app.route('/logout')
+def logout():
+
+    del sesson["user_id"]
+    flash("logget Out.")
+    return redirect("/")
+
+@app.route('/users')
+def user_list():
+
+    users = User.query.all()
+    return render_template("user_list.htm", users=users)
 
 
 
