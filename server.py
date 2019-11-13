@@ -63,7 +63,7 @@ def daily_price_variation():
     for t in tickers:
         per = round(((float(t.open_p - t.close_p)/abs(t.open_p))*100),2)
         per_daily_price_list.append(per)
-        dates.append(t.date)
+        dates.append(t.date.year)
       
 
     data_dict = {
@@ -84,26 +84,25 @@ def daily_price_variation():
 
 
 
+@app.route('/login', methods=['GET'])
+def login_form():
+    """login form."""
+
+    return render_template("login_form.html")
 
 
 
-# @app.route('/login', methods=['GET'])
-# def login_form():
-#     """Show login form."""
+@app.route('/login', methods=['POST'])
+def login_create():
+    """Users need to login"""
 
-#     return render_template("login_form.html")
+    email = request.form["email"]
+    fname = request.form["firstname"]
+    lname = request.form["lastname"]
 
-# @app.route('/login', methods=['POST'])
-# def login_create():
-#     """Users need to login"""
-
-#     email = request.form["email"]s
-#     fname = request.form["firstname"]
-#     lname = request.form["lastname"]
-
-#     if not user:
-#         flash("No such user")
-#         return redirect("/login")
+    if not user:
+        flash("No such user")
+        return redirect("/login")
 
 
 
