@@ -9,8 +9,18 @@
 <!DOCTYPE html>
 <html>
 <body>
+<form action="/add_profolio" method="POST">
+  <div class="topnav">
+    <input type = "text" placeholder="ticker" required>
+    <input type="submit" value="ADD TO MY PROFOLIO" id="my-profolio">  
+  </div>
+</form><br>
+  
+
+
 <form id="chart-form">
   <select name="comp" id="comp-field" >
+    <option value = ""></option>
     <option value="PYPl">Paypal</option>
     <option value="NVDA">Nvidia</option>
     <option value="CRM">Salesforce</option>
@@ -18,8 +28,16 @@
     <option value="AAPL">Apple</option>
     <option value="MSFT">Microsoft</option>
   </select>
-  <input type="submit" value="Submit" id="ticker-submit">
+  <input type="submit" value="VIEW CHARTS" id="ticker-submit">
 
+ <!--  Post request. Check if users have added to their profolio-> server
+  inside the end point->another route
+
+  create a drop out . form with 2 buttons  -->
+  
+
+  <br>
+  <br>
 </form>
 
   <div class="Company">
@@ -41,11 +59,12 @@
         yAxes: [{
           ticks: {
             frontFamily: "Roboto Mono",
-            frontcolor: "#556F7B",
+            frontcolor: "#F5F5F5",
             frontStyle: "bold",
             beginatZero: true,
-            maxTicksLimit: 5,
-            padding:20
+            maxTicksLimit: 10,
+            padding: 20
+        
           },
           gridLines: {
             display: false,
@@ -54,6 +73,15 @@
           }
         }],
         xAxes: [{
+          ticks: {
+            frontFamily: "Roboto Mono",
+            frontcolor: "red",
+            frontStyle: "bold",
+            beginatZero: true,
+            maxTicksLimit: 10,
+            padding: 20
+
+          },
           gridLines: {
             display: false,
             drawTicks: false,
@@ -66,9 +94,12 @@
     const lineChartEl = $("#lineChart").get(0);
 
     // Make Line Chart of daily stock prices
-    const ctxLine = lineChartEl.getContext("2d");  
+    const ctxLine = lineChartEl.getContext("2d"); 
+
+    // Make Bar chart of daily stock price variation  
     const ctx_bar = $("#BarChart").get(0).getContext("2d");
 
+    
     const lineWidth = lineChartEl.width;
     const lineHeight = lineChartEl.height;
     const lineGradient = ctxLine.createLinearGradient(
@@ -76,6 +107,10 @@
     );
     lineGradient.addColorStop(0.5, "#ff00a5");
     lineGradient.addColorStop(1, "#ffa500");
+
+    
+
+
 
     // $.get("/chart.json", (data) => {
     //   let compChart = Chart.Line(ctx_line, {
@@ -98,7 +133,7 @@
           ctxLine, {
             data: {
               labels: dataFrmServer.dates,
-              datasets: [{
+               datasets: [{
                 borderColor: lineGradient,
                 pointBackgroundColor: lineGradient,
                 fill: false,
@@ -113,8 +148,10 @@
         $("#lineLegend").html(compChart.generateLegend());
       });
 
+
+
       $.get("/variation.json", formInputs, (data) => {
-      let myBarChart = Chart.Bar(ctx_bar, {
+        let myBarChart = Chart.Bar(ctx_bar, {
                                     type: "bar",
                                     data: data,
                                     options: options
@@ -122,31 +159,12 @@
       $("#BarLegend").html(myBarChart.generateLegend());
 
 
-  
     });
 
 });
 
   
-    // let ctx_line = $("#BarChart").get(0).getContext("2d");
-
-    // $('#chart-form').on('submit', (evt) => {
-    //   evt.preventDefault();
-
-    //   const formInputs = $('#chart-form').serialize();
-
-    //   $.get("/variation.json", formInputs, (data) => {
-    //   let myBarChart = new Chart(ctx_bar, {
-    //                                 type: "bar",
-    //                                 data: data,
-    //                                 options: options
-    //                             });
-    //   $("#BarLegend").html(myBarChart.generateLegend());
-    // });
-    // });
-
-
-
+  
   </script>
 </body>
 </html>
