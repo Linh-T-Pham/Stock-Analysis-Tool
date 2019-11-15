@@ -17,7 +17,7 @@ app.secret_key = "ABC"
 app.jinja_env.undefined = StrictUndefined
 
 
-@app.route('/')
+@app.route('/charts')
 def index():
     
 
@@ -36,7 +36,7 @@ def get_chart():
     dates = []
     close_prices = []
     for t in tickers: 
-        dates.append(t.date.year)
+        dates.append(t.date.month)
         close_prices.append(t.close_p)
 
     dates.reverse()
@@ -63,10 +63,14 @@ def daily_price_variation():
     for t in tickers:
         per = round(((float(t.open_p - t.close_p)/abs(t.open_p))*100),2)
         per_daily_price_list.append(per)
-        dates.append(t.date.year)
+        dates.append(t.date.month)
+
+    dates.reverse()
+    per_daily_price_list.reverse()
       
 
     data_dict = {
+
         "labels": dates,
         "datasets": [
             {
@@ -75,7 +79,9 @@ def daily_price_variation():
                 "barThickness" :2,
                 "maxBarThickness": 3,
                 "minBarLength":1,
-                "data":per_daily_price_list,
+                "backgroundColor": 'rgb(144,238,144)',
+                "borderColor": 'rgb(144,238,144)',
+                "data":per_daily_price_list
                }
         ]
     }
@@ -89,7 +95,6 @@ def login_form():
     """login form."""
 
     return render_template("login_form.html")
-
 
 
 @app.route('/login', methods=['POST'])
@@ -106,35 +111,74 @@ def login_create():
     db.session.add(new_user)
     db.session.commit()
 
-    return render_template('/')
+    return redirect("/charts")
 
+@app.route('/login', methods=['POST'])
+def login_process():
 
+    email = request.form['email']
+    password = request.form['password']
+    # fname = request.form['firstname']
+    # lname = request.form['lastname']
 
-    
+    user = User.query.filter_by(email=email).first()
 
-    # if not user 
-    #     flash("No such user")
-    #     return redirect("/login")
+    if not user:
+        flash("No such users")
+        return redirect("/login")
 
-    # session["user_id"] = user.user_id
+    if user.password != password:
+        flash("Incorrect password")
+        return redirect("/login")
 
-    # flash("Logged in")
-    # return redirect(f"/users/{user.user_id}")
+    session["user_id"] = user.user_id
 
-
-@app.route('/logout')
-def logout():
-
-    del sesson["user_id"]
-    flash("logget Out.")
+    flash("Logged in")
     return redirect("/")
 
-@app.route('/users')
-def user_list():
+@app.route("/logout")
+def logout():
+    del session["user_id"]
+    flash("Logged Out.")
+    return redirect("/charts")
 
-    users = User.query.all()
-    return render_template("user_list.htm", users=users)
 
+# FOR LOADING NEW COMPANIES
+# ticker = request.args.get('ticker')
+# name = request.args.get('name')
+# company = {ticker: name}
+# load_company(company)
+@app.route('/add_profolio', methods=['POST'])
+def add_to_profolio():
+
+    ticker = request.form["ticker"]
+
+    new_ticker = User_Company(ticker=ticker)
+
+    db.session.add(new_ticker)
+    db.session.commit()
+
+    return render_template("myprofolio.html")
+
+
+@app.route('/calculator')
+def create_calculator():
+
+
+    total_buy_price = shares * buy_price 
+
+    total_sell_price = shares * total_sell_price
+
+    if total_buy_price > total_sell_price:
+        profit = total_sell_price - total_buy_price
+        return profit 
+    else:
+        loss = total_buy_price - total_sell_price
+        return loss 
+
+
+
+   
 
 
 if __name__ == "__main__":
