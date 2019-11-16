@@ -26,17 +26,17 @@ app.jinja_env.undefined = StrictUndefined
 # load_company(company)
 
 
-@app.route('/charts')
+@app.route("/charts")
 def index():
     
 
     return render_template("charts.html")
 
 
-@app.route('/chart.json')
+@app.route("/chart.json")
 def get_chart():
    
-    ticker = request.args.get('comp')
+    ticker = request.args.get("comp")
  
 
     tickers = DailyPrice.query.filter_by(ticker=ticker).all()
@@ -58,10 +58,10 @@ def get_chart():
   
     return jsonify(data_dict)
  
-@app.route('/variation.json')
+@app.route("/variation.json")
 def daily_price_variation():
 
-    ticker = request.args.get('comp')
+    ticker = request.args.get("comp")
 
     tickers = DailyPrice.query.filter_by(ticker=ticker).all()
 
@@ -98,21 +98,21 @@ def daily_price_variation():
     return jsonify(data_dict)
 
 
-@app.route('/login', methods=['GET'])
+@app.route("/login", methods=["GET"])
 def login_form():
     """login form."""
 
     return render_template("login_form.html")
 
 
-@app.route('/register', methods=['GET'])
+@app.route("/register", methods=["GET"])
 def register_form():
     """login form."""
 
     return render_template("register.html")
 
 
-@app.route('/register', methods=['POST'])
+@app.route("/register", methods=["POST"])
 def register_create():
     """Users need to login"""
 
@@ -129,12 +129,12 @@ def register_create():
     return redirect("/login")
 
 
-@app.route('/login', methods=['POST'])
+@app.route("/login", methods=["POST"])
 def login_process():
     """Create login process"""
 
-    email = request.form['email']
-    password = request.form['password']
+    email = request.form["email"]
+    password = request.form["password"]
   
     user = User.query.filter_by(email=email).first()
 
@@ -164,7 +164,7 @@ def logout():
 # name = request.args.get('name')
 # company = {ticker: name}
 # load_company(company)
-@app.route('/add_portfolio', methods=['POST'])
+@app.route("/add_portfolio", methods=['POST'])
 def add_to_profolio():
     """Users enter a ticker on the chart page and add it to their portfolio"""
     
@@ -208,19 +208,20 @@ def add_to_profolio():
 #                             profit=profit,
 #                             loss=loss)
 
-@app.route('/correlation')
+@app.route("/correlation")
 def analyze_corr():
     
     ticker1 = request.agrs.get["ticker1"]
     ticker2 = request.agrs.get["ticker2"]
 
-
+    """Get data for ticker 1"""
     data_by_ticker = request_api(ticker1, 2019-10-15)
-    # print(data_by_ticker)
 
     for date, value in data_by_ticker.items():
         date = date1
         close_price1 = value["4. close"]
+
+    """Get data for ticker 2"""
       
     data_by_ticker = request_api(ticker2, 2019-10-15)
 
@@ -229,9 +230,34 @@ def analyze_corr():
         close_price2 = value["4. close"]
 
     dfcomp = web.DataReader(close_price1, close_price2)
+    restscomp = dfcomp.pct_change()
+    corr = restscomp.corr()
+    
+    x1 = restcomp.ticker1
+    y1 = restcomp.ticker2
 
-    print(dfcomp)
- 
+    data_dict = {
+
+        "labels": dates,
+        "datasets": [
+            {
+                "label": "Scatter Dataset",
+                "barPercentage": 0.5,
+                "barThickness" :2,
+                "maxBarThickness": 3,
+                "minBarLength":1,
+                "backgroundColor": 'rgb(144,238,144)',
+                "borderColor": 'rgb(144,238,144)',
+                "data":[{
+                      x: x1,
+                      y: y1
+
+                }]
+               }
+        ]
+    }
+
+    return jsonify(data_dict)
 
 
 if __name__ == "__main__":
