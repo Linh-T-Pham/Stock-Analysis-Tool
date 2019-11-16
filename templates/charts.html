@@ -9,16 +9,22 @@
 <!DOCTYPE html>
 <html>
 <body>
-<form action="/add_profolio" method="POST">
+<form action="/add_portfolio" method="POST">
   <div class="topnav">
-    <input type = "text" placeholder="ticker" required>
+      <label>Enter a ticker:
+        <input type="ticker" name="ticker" required class="form-control">
     <input type="submit" value="ADD TO MY PROFOLIO" id="my-profolio">  
   </div>
 </form><br>
-  
-
+<!--   
+<form action="/get_data", id="chart-form">
+ <input type="ticker" name="ticker" required="form-control">ticker
+ <input type="ticker" name="company" required="form-control">company
+ <input type="submit" value="VIEW CHARTS" id="ticker-submit">
+</form> -->
 
 <form id="chart-form">
+
   <select name="comp" id="comp-field" >
     <option value = ""></option>
     <option value="PYPl">Paypal</option>
@@ -29,11 +35,6 @@
     <option value="MSFT">Microsoft</option>
   </select>
   <input type="submit" value="VIEW CHARTS" id="ticker-submit">
-
- <!--  Post request. Check if users have added to their profolio-> server
-  inside the end point->another route
-
-  create a drop out . form with 2 buttons  -->
   
 
   <br>
