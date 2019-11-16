@@ -7,6 +7,8 @@ from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, User_Company, Company, DailyPrice
 import datetime 
 import pandas as pd
+# import pandas_datareader.data as web
+from api import get_ticker_data
 
 
 app = Flask(__name__)
@@ -96,12 +98,12 @@ def daily_price_variation():
     return jsonify(data_dict)
 
 
-
 @app.route('/login', methods=['GET'])
 def login_form():
     """login form."""
 
     return render_template("login_form.html")
+
 
 @app.route('/register', methods=['GET'])
 def register_form():
@@ -126,6 +128,7 @@ def register_create():
 
     return redirect("/login")
 
+
 @app.route('/login', methods=['POST'])
 def login_process():
     """Create login process"""
@@ -133,7 +136,6 @@ def login_process():
     email = request.form['email']
     password = request.form['password']
   
-
     user = User.query.filter_by(email=email).first()
 
     if not user:
@@ -149,6 +151,7 @@ def login_process():
     flash("Logged in")
     return redirect("/charts")
 
+
 @app.route("/logout")
 def logout():
     del session["user_id"]
@@ -163,7 +166,6 @@ def logout():
 # load_company(company)
 @app.route('/add_portfolio', methods=['POST'])
 def add_to_profolio():
-
     """Users enter a ticker on the chart page and add it to their portfolio"""
     
     ticker = request.form["ticker"]
@@ -176,60 +178,60 @@ def add_to_profolio():
     new_ticker = User_Company(ticker=ticker, user_id=user_id)
 
 
-
     db.session.add(new_ticker)
     db.session.commit()
 
     user = User.query.get(user_id)
 
-
     return render_template("myportfolio.html", companies=user.companies)
 
-@app.route('/get_user_ticker')
-def get_ticker():
 
-    """"Pass the ticker to jinja template on myportfolio.html"""
-    user_id = session['user_id']
+# @app.route('/calculator', methods=['POST'])
+# def create_calculator():
 
-    users_ticker = User_Company.query.filter(
-                        User_Company.user_id == user_id).first()
+#     """Calculate the total gain and loss and pass them to myprofolio.htm"""  
+#     shares = request.form["shares"]
+#     total_buy_price = shares * buy_price 
 
+#     total_sell_price = shares * total_sell_price
 
-    return render_template("myportfolio.html",
-                            users_ticker=users_ticker)
+#     if total_buy_price > total_sell_price:
+#         profit = total_sell_price - total_buy_price
+#         # return profit 
+#     else:
+#         loss = total_buy_price - total_sell_price
+#         # return loss 
 
+#     return render_template("myportfolio.html",
+#                             total_buy_price = total_buy_price,
+#                             total_sell_price = total_sell_price,
+#                             profit=profit,
+#                             loss=loss)
 
-@app.route('/calculator', methods=['POST'])
-def create_calculator():
-
-    """Calculate the total gain and loss and pass them to myprofolio.htm"""  
-
-    total_buy_price = shares * buy_price 
-
-    total_sell_price = shares * total_sell_price
-
-    if total_buy_price > total_sell_price:
-        profit = total_sell_price - total_buy_price
-        # return profit 
-    else:
-        loss = total_buy_price - total_sell_price
-        # return loss 
-
-    return render_template("myportfolio.html",
-                            total_buy_price = total_buy_price,
-                            total_sell_price = total_sell_price,
-                            profit=profit,
-                            loss=loss)
-
-# @app.route('/correlation')
-# def analyze_corr():
+@app.route('/correlation')
+def analyze_corr():
+    
+    ticker1 = request.agrs.get["ticker1"]
+    ticker2 = request.agrs.get["ticker2"]
 
 
+    data_by_ticker = request_api(ticker1, 2019-10-15)
+    # print(data_by_ticker)
 
+    for date, value in data_by_ticker.items():
+        date = date1
+        close_price1 = value["4. close"]
+      
+    data_by_ticker = request_api(ticker2, 2019-10-15)
 
+    for date, value in data_by_ticker.items():
+        date = date2
+        close_price2 = value["4. close"]
 
+    dfcomp = web.DataReader(close_price1, close_price2)
 
-   
+    print(dfcomp)
+ 
 
 
 if __name__ == "__main__":
