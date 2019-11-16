@@ -1,11 +1,12 @@
 from jinja2 import StrictUndefined
 
-from flask import Flask, render_template, request, flash, redirect, sessions, jsonify
+from flask import Flask, render_template, request, flash, redirect, session, jsonify
 
 from flask_debugtoolbar import DebugToolbarExtension
 
 from model import connect_to_db, db, User, User_Company, Company, DailyPrice
 import datetime 
+import pandas as pd
 
 
 app = Flask(__name__)
@@ -15,6 +16,12 @@ app.secret_key = "ABC"
 
 
 app.jinja_env.undefined = StrictUndefined
+
+# FOR LOADING NEW COMPANIES
+# ticker = request.args.get('ticker')
+# name = request.args.get('name')
+# company = {ticker: name}
+# load_company(company)
 
 
 @app.route('/charts')
@@ -96,9 +103,15 @@ def login_form():
 
     return render_template("login_form.html")
 
+@app.route('/register', methods=['GET'])
+def register_form():
+    """login form."""
 
-@app.route('/login', methods=['POST'])
-def login_create():
+    return render_template("register.html")
+
+
+@app.route('/register', methods=['POST'])
+def register_create():
     """Users need to login"""
 
     email = request.form["email"]
@@ -111,15 +124,15 @@ def login_create():
     db.session.add(new_user)
     db.session.commit()
 
-    return redirect("/charts")
+    return redirect("/login")
 
 @app.route('/login', methods=['POST'])
 def login_process():
+    """Create login process"""
 
     email = request.form['email']
     password = request.form['password']
-    # fname = request.form['firstname']
-    # lname = request.form['lastname']
+  
 
     user = User.query.filter_by(email=email).first()
 
@@ -134,7 +147,7 @@ def login_process():
     session["user_id"] = user.user_id
 
     flash("Logged in")
-    return redirect("/")
+    return redirect("/charts")
 
 @app.route("/logout")
 def logout():
@@ -148,22 +161,48 @@ def logout():
 # name = request.args.get('name')
 # company = {ticker: name}
 # load_company(company)
-@app.route('/add_profolio', methods=['POST'])
+@app.route('/add_portfolio', methods=['POST'])
 def add_to_profolio():
 
+    """Users enter a ticker on the chart page and add it to their portfolio"""
+    
     ticker = request.form["ticker"]
 
-    new_ticker = User_Company(ticker=ticker)
+    user_id = session.get('user_id')
+
+    if not user_id:
+        return redirect("/login")
+
+    new_ticker = User_Company(ticker=ticker, user_id=user_id)
+
+
 
     db.session.add(new_ticker)
     db.session.commit()
 
-    return render_template("myprofolio.html")
+    user = User.query.get(user_id)
 
 
-@app.route('/calculator')
+    return render_template("myportfolio.html", companies=user.companies)
+
+@app.route('/get_user_ticker')
+def get_ticker():
+
+    """"Pass the ticker to jinja template on myportfolio.html"""
+    user_id = session['user_id']
+
+    users_ticker = User_Company.query.filter(
+                        User_Company.user_id == user_id).first()
+
+
+    return render_template("myportfolio.html",
+                            users_ticker=users_ticker)
+
+
+@app.route('/calculator', methods=['POST'])
 def create_calculator():
 
+    """Calculate the total gain and loss and pass them to myprofolio.htm"""  
 
     total_buy_price = shares * buy_price 
 
@@ -171,10 +210,22 @@ def create_calculator():
 
     if total_buy_price > total_sell_price:
         profit = total_sell_price - total_buy_price
-        return profit 
+        # return profit 
     else:
         loss = total_buy_price - total_sell_price
-        return loss 
+        # return loss 
+
+    return render_template("myportfolio.html",
+                            total_buy_price = total_buy_price,
+                            total_sell_price = total_sell_price,
+                            profit=profit,
+                            loss=loss)
+
+# @app.route('/correlation')
+# def analyze_corr():
+
+
+
 
 
 
