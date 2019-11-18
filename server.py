@@ -7,8 +7,9 @@ from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, User_Company, Company, DailyPrice
 import datetime 
 import pandas as pd
-# import pandas_datareader.data as web
-from api import get_ticker_data
+import pandas_datareader.data as web
+import requests 
+import json
 
 
 app = Flask(__name__)
@@ -28,7 +29,6 @@ app.jinja_env.undefined = StrictUndefined
 
 @app.route("/charts")
 def index():
-    
 
     return render_template("charts.html")
 
@@ -38,12 +38,12 @@ def get_chart():
    
     ticker = request.args.get("comp")
  
+    tickers = DailyPrice.query.filter_by(ticker=ticker).limit(100).all()
 
-    tickers = DailyPrice.query.filter_by(ticker=ticker).all()
-  
 
     dates = []
     close_prices = []
+    
     for t in tickers: 
         dates.append(t.date.month)
         close_prices.append(t.close_p)
@@ -63,7 +63,7 @@ def daily_price_variation():
 
     ticker = request.args.get("comp")
 
-    tickers = DailyPrice.query.filter_by(ticker=ticker).all()
+    tickers = DailyPrice.query.filter_by(ticker=ticker).limit(150).all()
 
     """Return daily price variation in percentage"""
     dates = []
@@ -83,7 +83,7 @@ def daily_price_variation():
         "labels": dates,
         "datasets": [
             {
-                "label": "Daily Price Variation in Percentage",
+                # "label": false,
                 "barPercentage": 0.5,
                 "barThickness" :2,
                 "maxBarThickness": 3,
@@ -183,69 +183,50 @@ def add_to_profolio():
 
     user = User.query.get(user_id)
 
-    return render_template("myportfolio.html", companies=user.companies)
+    # return render_template("myportfolio.html", companies=user.companies)
+    return redirect("/user_stock")
 
 
-# @app.route('/calculator', methods=['POST'])
-# def create_calculator():
-
-#     """Calculate the total gain and loss and pass them to myprofolio.htm"""  
-#     shares = request.form["shares"]
-#     total_buy_price = shares * buy_price 
-
-#     total_sell_price = shares * total_sell_price
-
-#     if total_buy_price > total_sell_price:
-#         profit = total_sell_price - total_buy_price
-#         # return profit 
-#     else:
-#         loss = total_buy_price - total_sell_price
-#         # return loss 
-
-#     return render_template("myportfolio.html",
-#                             total_buy_price = total_buy_price,
-#                             total_sell_price = total_sell_price,
-#                             profit=profit,
-#                             loss=loss)
 
 @app.route("/correlation")
 def analyze_corr():
     
-    ticker1 = request.agrs.get["ticker1"]
-    ticker2 = request.agrs.get["ticker2"]
+    ticker1 = request.args.get("ticker1")
+    # print(request.args)
+    ticker2 = request.args.get("ticker2")
 
     """Get data for ticker 1"""
-    data_by_ticker = request_api(ticker1, 2019-10-15)
+    # data_by_ticker = request_api("ticker1", 2019)
 
-    for date, value in data_by_ticker.items():
-        date = date1
-        close_price1 = value["4. close"]
+    # for date, value in data_by_ticker.items():
+    #     date = date1
+    #     close_price1 = value["4. close"]
 
-    """Get data for ticker 2"""
+    # # # """Get data for ticker 2"""
       
-    data_by_ticker = request_api(ticker2, 2019-10-15)
+    # data_by_ticker = request_api("ticker2", 2019)
 
-    for date, value in data_by_ticker.items():
-        date = date2
-        close_price2 = value["4. close"]
+    # for date, value in data_by_ticker.items():
+    #     date = date2
+    #     close_price2 = value["4. close"]
 
-    dfcomp = web.DataReader(close_price1, close_price2)
-    restscomp = dfcomp.pct_change()
-    corr = restscomp.corr()
+    start = "2019-5-18"
+    end = "2019-11-14"
+
+    ticker_data = web.DataReader([ticker1,ticker2], "yahoo", start, end)['Adj Close']
+
+    percomp = ticker_data.pct_change()
+    corr = percomp.corr()
     
-    x1 = restcomp.ticker1
-    y1 = restcomp.ticker2
+    x1 = percomp.ticker1
+    y1 = percomp.ticker2
+
 
     data_dict = {
 
-        "labels": dates,
         "datasets": [
             {
                 "label": "Scatter Dataset",
-                "barPercentage": 0.5,
-                "barThickness" :2,
-                "maxBarThickness": 3,
-                "minBarLength":1,
                 "backgroundColor": 'rgb(144,238,144)',
                 "borderColor": 'rgb(144,238,144)',
                 "data":[{
@@ -257,7 +238,38 @@ def analyze_corr():
         ]
     }
 
-    return jsonify(data_dict)
+    # return jsonify(data_dict)
+    return render_template("myportfolio.html")
+
+@app.route("/user_stock")
+def add_stock():
+
+    """Pull all the tickers from the user_companies table
+       those tickers should be in a list
+       Loop over those tickers to get one single ticker
+       each single ticker has its own api
+       Append api in an empty list
+       then find specific value in each api 
+    """
+    user = User.query.get(session['user_id'])
+    tickers = user.companies
+
+    response_list = []
+
+    for each_ticker in tickers:
+
+        api = requests.get("https://cloud.iexapis.com/stable/stock/"+ each_ticker.ticker +"/quote?token=pk_ab6548b1284345368ccec6e806e70415")   
+        ticker_api = api.json()
+        response_list.append(ticker_api)
+
+
+
+    return render_template("myportfolio.html",
+                            ticker_data=response_list)
+
+
+   
+
 
 
 if __name__ == "__main__":
