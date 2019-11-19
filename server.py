@@ -5,11 +5,11 @@ from flask import Flask, render_template, request, flash, redirect, session, jso
 from flask_debugtoolbar import DebugToolbarExtension
 
 from model import connect_to_db, db, User, User_Company, Company, DailyPrice
-import datetime 
-import pandas as pd
-import pandas_datareader.data as web
-import requests 
+import datetime as dt
 import json
+import pandas_datareader.data as web
+import datetime 
+import requests
 
 
 app = Flask(__name__)
@@ -20,32 +20,27 @@ app.secret_key = "ABC"
 
 app.jinja_env.undefined = StrictUndefined
 
-# FOR LOADING NEW COMPANIES
-# ticker = request.args.get('ticker')
-# name = request.args.get('name')
-# company = {ticker: name}
-# load_company(company)
 
-
-@app.route("/charts")
+@app.route('/charts')
 def index():
+    
 
     return render_template("charts.html")
 
 
-@app.route("/chart.json")
+@app.route('/chart.json')
 def get_chart():
    
-    ticker = request.args.get("comp")
+    ticker = request.args.get('comp')
  
-    tickers = DailyPrice.query.filter_by(ticker=ticker).limit(100).all()
 
+    tickers = DailyPrice.query.filter_by(ticker=ticker).all()
+  
 
     dates = []
     close_prices = []
-    
     for t in tickers: 
-        dates.append(t.date.month)
+        dates.append(t.date.year)
         close_prices.append(t.close_p)
 
     dates.reverse()
@@ -57,13 +52,14 @@ def get_chart():
     }
   
     return jsonify(data_dict)
+
  
-@app.route("/variation.json")
+@app.route('/variation.json')
 def daily_price_variation():
 
-    ticker = request.args.get("comp")
+    ticker = request.args.get('comp')
 
-    tickers = DailyPrice.query.filter_by(ticker=ticker).limit(150).all()
+    tickers = DailyPrice.query.filter_by(ticker=ticker).all()
 
     """Return daily price variation in percentage"""
     dates = []
@@ -73,9 +69,6 @@ def daily_price_variation():
         per = round(((float(t.open_p - t.close_p)/abs(t.open_p))*100),2)
         per_daily_price_list.append(per)
         dates.append(t.date.month)
-
-    dates.reverse()
-    per_daily_price_list.reverse()
       
 
     data_dict = {
@@ -159,18 +152,13 @@ def logout():
     return redirect("/charts")
 
 
-# FOR LOADING NEW COMPANIES
-# ticker = request.args.get('ticker')
-# name = request.args.get('name')
-# company = {ticker: name}
-# load_company(company)
 @app.route("/add_portfolio", methods=['POST'])
 def add_to_profolio():
     """Users enter a ticker on the chart page and add it to their portfolio"""
     
     ticker = request.form["ticker"]
 
-    user_id = session.get('user_id')
+    user_id = session.get("user_id")
 
     if not user_id:
         return redirect("/login")
@@ -192,35 +180,23 @@ def add_to_profolio():
 def analyze_corr():
     
     ticker1 = request.args.get("ticker1")
-    # print(request.args)
+    
     ticker2 = request.args.get("ticker2")
 
-    """Get data for ticker 1"""
-    # data_by_ticker = request_api("ticker1", 2019)
-
-    # for date, value in data_by_ticker.items():
-    #     date = date1
-    #     close_price1 = value["4. close"]
-
-    # # # """Get data for ticker 2"""
-      
-    # data_by_ticker = request_api("ticker2", 2019)
-
-    # for date, value in data_by_ticker.items():
-    #     date = date2
-    #     close_price2 = value["4. close"]
-
-    start = "2019-5-18"
-    end = "2019-11-14"
-
-    ticker_data = web.DataReader([ticker1,ticker2], "yahoo", start, end)['Adj Close']
-
-    percomp = ticker_data.pct_change()
-    corr = percomp.corr()
+    #set the time frame to fetch stock data
     
-    x1 = percomp.ticker1
-    y1 = percomp.ticker2
+    start = dt.datetime(2019, 5, 15)
+    end = dt.datetime(2019, 11, 15)
 
+    df1 = web.DataReader(ticker1, 'av-daily', start, end, api_key= "pk_ab6548b1284345368ccec6e806e70415")['close']
+
+    df2 = web.DataReader(ticker2, 'av-daily', start, end, api_key= "pk_ab6548b1284345368ccec6e806e70415")['close']
+
+    x1 = df1.pct_change()
+    print(x1)
+    
+    y1 = df2.pct_change()
+    print(x2)
 
     data_dict = {
 
@@ -244,13 +220,6 @@ def analyze_corr():
 @app.route("/user_stock")
 def add_stock():
 
-    """Pull all the tickers from the user_companies table
-       those tickers should be in a list
-       Loop over those tickers to get one single ticker
-       each single ticker has its own api
-       Append api in an empty list
-       then find specific value in each api 
-    """
     user = User.query.get(session['user_id'])
     tickers = user.companies
 
@@ -268,7 +237,6 @@ def add_stock():
                             ticker_data=response_list)
 
 
-   
 
 
 
