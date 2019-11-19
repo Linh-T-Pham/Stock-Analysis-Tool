@@ -2,7 +2,6 @@
 
 {% block title %} {% endblock %}
 
-
 {% block content %}
 
 <br>
@@ -16,15 +15,8 @@
     <input type="submit" value="ADD TO MY PROFOLIO" id="my-profolio">  
   </div>
 </form><br>
-<!--   
-<form action="/get_data", id="chart-form">
- <input type="ticker" name="ticker" required="form-control">ticker
- <input type="ticker" name="company" required="form-control">company
- <input type="submit" value="VIEW CHARTS" id="ticker-submit">
-</form> -->
 
 <form id="chart-form">
-
   <select name="comp" id="comp-field" >
     <option value = ""></option>
     <option value="PYPl">Paypal</option>
@@ -34,73 +26,28 @@
     <option value="AAPL">Apple</option>
     <option value="MSFT">Microsoft</option>
   </select>
-  <input type="submit" value="VIEW CHARTS" id="ticker-submit">
-  
-
-  <br>
-  <br>
+  <input type="submit" value="VIEW CHARTS" id="ticker-submit"><br><br>
 </form>
+
 
   <div class="Company">
     <canvas id="lineChart"></canvas>
     <div id="lineLegend" class="chart-legend"></div>
   </div>
 
+
   <div class="Company">
     <canvas id="BarChart"></canvas>
-    <div id="BarLegend" class="chart-legend"></div>
-    
+    <div id="BarLegend" class="chart-legend"></div>   
   </div>
 
   <script>
 
-    const options = {
-      responsive: true,
-      scales: {
-        yAxes: [{
-          ticks: {
-            frontFamily: "Roboto Mono",
-            frontcolor: "#F5F5F5",
-            frontStyle: "bold",
-            beginatZero: true,
-            maxTicksLimit: 10,
-            padding: 20
-        
-          },
-          gridLines: {
-            display: false,
-            drawTicks: false,
-            drawBorder: false
-          }
-        }],
-        xAxes: [{
-          ticks: {
-            frontFamily: "Roboto Mono",
-            frontcolor: "red",
-            frontStyle: "bold",
-            beginatZero: true,
-            maxTicksLimit: 10,
-            padding: 20
-
-          },
-          gridLines: {
-            display: false,
-            drawTicks: false,
-            drawBorder: false
-          }
-        }]
-      }
-    };
 
     const lineChartEl = $("#lineChart").get(0);
 
-    // Make Line Chart of daily stock prices
-    const ctxLine = lineChartEl.getContext("2d"); 
-
-    // Make Bar chart of daily stock price variation  
-    const ctx_bar = $("#BarChart").get(0).getContext("2d");
-
-    
+    // Create Line Chart of daily stock prices
+    const ctxLine = lineChartEl.getContext("2d");   
     const lineWidth = lineChartEl.width;
     const lineHeight = lineChartEl.height;
     const lineGradient = ctxLine.createLinearGradient(
@@ -108,10 +55,6 @@
     );
     lineGradient.addColorStop(0.5, "#ff00a5");
     lineGradient.addColorStop(1, "#ffa500");
-
-    
-
-
 
     // $.get("/chart.json", (data) => {
     //   let compChart = Chart.Line(ctx_line, {
@@ -142,21 +85,109 @@
                 data: dataFrmServer.close_prices
               }]
             },
-            options: options
+            options: {
+            responsive: true,
+            scales: {
+              yAxes: [{
+                ticks: {
+                  frontFamily: "Roboto Mono",
+                  frontcolor: "#F5F5F5",
+                  frontStyle: "bold",
+                  beginatZero: true,
+                  maxTicksLimit: 10,
+                  padding: 20,
+                  callback: function(value, index, values){
+                  return "$" + value;
+                }
+        
+              },
+                
+                gridLines: {
+                  display: false,
+                  drawTicks: false,
+                  drawBorder: false
+                }
+             }],
+              
+              xAxes: [{
+                ticks: {
+                  frontFamily: "Roboto Mono",
+                  frontcolor: "red",
+                  frontStyle: "bold",
+                  beginatZero: true,
+                  maxTicksLimit: 10,
+                  padding: 20
+
+                },
+                  gridLines: {
+                  display: false,
+                  drawTicks: false,
+                  drawBorder: false
+              }
+             }]
+            }
+          }
+
           }
         );
 
         $("#lineLegend").html(compChart.generateLegend());
       });
 
+      // CREATE DAILY PRICE VARIATION CHART
 
+      const ctx_bar = $("#BarChart").get(0).getContext("2d");
 
       $.get("/variation.json", formInputs, (data) => {
-        let myBarChart = Chart.Bar(ctx_bar, {
-                                    type: "bar",
-                                    data: data,
-                                    options: options
-                                });
+        let myBarChart = 
+        Chart.Bar(ctx_bar, {
+                  type: "bar",
+                  data: data,
+                  options: {
+                  responsive: true,
+                  title:{
+                    display:true,
+                    text: "DAILY PRICE VARIATION IN PERCENTAGE"
+                  },
+                  scales: {
+                    yAxes: [{
+                      ticks: {
+                        frontFamily: "Roboto Mono",
+                        frontcolor: "#FFFFFF",
+                        frontStyle: "bold",
+                        beginatZero: true,
+                        maxTicksLimit: 10,
+                        padding: 20,
+                        callback: function(value, index, values){
+                          return value + "%";
+                        }
+        
+                        },
+                      gridLines: {
+                        display: false,
+                        drawTicks: false,
+                        drawBorder: false
+                      }
+                    }],
+                    xAxes: [{
+                      ticks: {
+                        frontFamily: "Roboto Mono",
+                        frontcolor: "#FFFFFF",
+                        frontStyle: "bold",
+                        beginatZero: true,
+                        maxTicksLimit: 10,
+                        padding: 20
+
+                        },
+                      gridLines: {
+                        display: false,
+                        drawTicks: false,
+                        drawBorder: false
+                        }
+                      }]
+                      }
+                    }
+                  });
       $("#BarLegend").html(myBarChart.generateLegend());
 
 
@@ -164,8 +195,6 @@
 
 });
 
-  
-  
   </script>
 </body>
 </html>
