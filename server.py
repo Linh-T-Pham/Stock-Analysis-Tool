@@ -188,15 +188,19 @@ def analyze_corr():
     start = dt.datetime(2019, 5, 15)
     end = dt.datetime(2019, 11, 15)
 
-    df1 = web.DataReader(ticker1, 'av-daily', start, end, api_key= "pk_ab6548b1284345368ccec6e806e70415")['close']
+    df1 = web.DataReader(ticker1, 'av-daily', start, end, api_key="pk_ab6548b1284345368ccec6e806e70415")['close']
 
-    df2 = web.DataReader(ticker2, 'av-daily', start, end, api_key= "pk_ab6548b1284345368ccec6e806e70415")['close']
+    df2 = web.DataReader(ticker2, 'av-daily', start, end, api_key="pk_ab6548b1284345368ccec6e806e70415")['close']
 
-    x1 = df1.pct_change()
-    print(x1)
-    
-    y1 = df2.pct_change()
-    print(x2)
+    per_ticker1 = df1.pct_change()
+    per_ticker2 = df2.pct_change()
+
+    data = []
+    ticker2_list = per_ticker2.to_list()
+    for i, price in enumerate(per_ticker1):
+        if price == 'NaN': 
+            continue
+        data.append({"x": price, "y": ticker2_list[i]})
 
     data_dict = {
 
@@ -205,17 +209,12 @@ def analyze_corr():
                 "label": "Scatter Dataset",
                 "backgroundColor": 'rgb(144,238,144)',
                 "borderColor": 'rgb(144,238,144)',
-                "data":[{
-                      x: x1,
-                      y: y1
-
-                }]
+                "data":data
                }
         ]
     }
 
-    # return jsonify(data_dict)
-    return render_template("myportfolio.html")
+    return jsonify(data_dict)
 
 @app.route("/user_stock")
 def add_stock():
@@ -235,8 +234,6 @@ def add_stock():
 
     return render_template("myportfolio.html",
                             ticker_data=response_list)
-
-
 
 
 
