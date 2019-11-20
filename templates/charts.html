@@ -65,10 +65,10 @@
     //   $("#lineLegend").html(compChart.generateLegend());
     // });
 
-    $('#chart-form').on('submit', (evt) => {
+    $("#chart-form").on("submit", (evt) => {
       evt.preventDefault();
 
-      const formInputs = $('#chart-form').serialize();
+      const formInputs = $("#chart-form").serialize();
 
       $.get("/chart.json", formInputs, (dataFrmServer) => {
         console.log(dataFrmServer);
@@ -189,8 +189,7 @@
                     }
                   });
       $("#BarLegend").html(myBarChart.generateLegend());
-
-
+      
     });
 
 });
