@@ -176,9 +176,10 @@ def add_to_profolio():
 
 
 
-@app.route("/correlation")
+@app.route("/correlation.json")
 def analyze_corr():
-    
+    """Correlate two companies"""
+    print("YAYAYAYAY \n\n\n\n\n")
     ticker1 = request.args.get("ticker1")
     
     ticker2 = request.args.get("ticker2")
@@ -198,8 +199,7 @@ def analyze_corr():
     data = []
     ticker2_list = per_ticker2.to_list()
     for i, price in enumerate(per_ticker1):
-        if price == 'NaN': 
-            continue
+        if price == 'NaN': continue
         data.append({"x": price, "y": ticker2_list[i]})
 
     data_dict = {
@@ -207,13 +207,13 @@ def analyze_corr():
         "datasets": [
             {
                 "label": "Scatter Dataset",
-                "backgroundColor": 'rgb(144,238,144)',
-                "borderColor": 'rgb(144,238,144)',
                 "data":data
                }
         ]
     }
-
+    
+    j_data = jsonify(data_dict)
+    print(j_data)
     return jsonify(data_dict)
 
 @app.route("/user_stock")
