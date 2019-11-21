@@ -7,7 +7,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, User_Company, Company, DailyPrice
 import datetime as dt
 import json
-import pandas_datareader.data as web
+import pandas_datareader.data as pan
 import datetime 
 import requests
 
@@ -40,7 +40,7 @@ def get_chart():
     dates = []
     close_prices = []
     for t in tickers: 
-        dates.append(t.date.year)
+        dates.append(t.date)
         close_prices.append(t.close_p)
 
     dates.reverse()
@@ -68,7 +68,7 @@ def daily_price_variation():
     for t in tickers:
         per = round(((float(t.open_p - t.close_p)/abs(t.open_p))*100),2)
         per_daily_price_list.append(per)
-        dates.append(t.date.month)
+        dates.append(t.date)
       
 
     data_dict = {
@@ -186,34 +186,65 @@ def analyze_corr():
 
     #set the time frame to fetch stock data
     
-    start = dt.datetime(2019, 5, 15)
+    start = dt.datetime(2019, 10, 15)
     end = dt.datetime(2019, 11, 15)
 
-    df1 = web.DataReader(ticker1, 'av-daily', start, end, api_key="pk_ab6548b1284345368ccec6e806e70415")['close']
+    df1 = pan.DataReader(ticker1, 'av-daily', start, end, 
+        api_key="pk_ab6548b1284345368ccec6e806e70415")['close']
 
-    df2 = web.DataReader(ticker2, 'av-daily', start, end, api_key="pk_ab6548b1284345368ccec6e806e70415")['close']
+    df2 = pan.DataReader(ticker2, 'av-daily', start, end, 
+        api_key="pk_ab6548b1284345368ccec6e806e70415")['close']
 
     per_ticker1 = df1.pct_change()
     per_ticker2 = df2.pct_change()
 
-    data = []
-    ticker2_list = per_ticker2.to_list()
-    for i, price in enumerate(per_ticker1):
-        if price == 'NaN': continue
-        data.append({"x": price, "y": ticker2_list[i]})
+    datasets = []
+
+    ticker1_dict = per_ticker1.to_dict()
+    
+    dataset1 = {"label":ticker1, 
+                "data": []}
+    dates = []
+    for d1, per1 in ticker1_dict.items():
+        if d1 != "2019-10-15":
+            dates.append(d1)
+            dataset1["data"].append({"x":d1, "y":per1})
+    
+    datasets.append(dataset1)
+
+    
+
+    ticker2_dict = per_ticker2.to_dict()
+    dataset2 = {"label": ticker2,
+                "data": []}
+    
+    for d2, per2 in ticker2_dict.items():
+        if d2 != "2019-10-15":
+            dataset2["data"].append({"x":d2, "y":per2})
+
+    datasets.append(dataset2)
+
+
+
+    
+    # ticker2_list = per_ticker2.to_dict()
+    # print(per_ticker2)
+    # for i, price in enumerate(per_ticker1.to_list()):
+    #     print(price, type(price))
+    #     if i == 0: 
+    #         print("\n\n\n\n\n\n")
+    #         continue
+    #     data.append({"x": price, "y": ticker2_list[i]})
+
+    # print(data)
+
 
     data_dict = {
-
-        "datasets": [
-            {
-                "label": "Scatter Dataset",
-                "data":data
-               }
-        ]
+        "labels": dates,
+        "datasets": datasets
     }
+    print(data_dict)
     
-    j_data = jsonify(data_dict)
-    print(j_data)
     return jsonify(data_dict)
 
 @app.route("/user_stock")
