@@ -188,8 +188,6 @@ def add_stock():
         ticker_api = api.json()
         response_list.append(ticker_api)
 
-
-
     return render_template("myportfolio.html",
                             ticker_data=response_list)
 
@@ -264,30 +262,50 @@ def analyze_corr():
     return jsonify(data_dict)
 
 
-@app.route("/risk_return_analysis")
+@app.route("/risk_return_analysis.json")
 def create_risk_return():
 
     """Pull all tickers for that user"""
     user = User.query.get(session['user_id'])
     tickers = user.companies
     
-    start = dt.datetime(2019, 10, 15)
-    end = dt.datetime(2019, 11, 15)
+    start = dt.datetime(2018, 10, 15)
+    end = dt.datetime(2019, 11, 22)
     
+    reTurn_list = []
+    risk_list =[]
     data_list = []
     for each_ticker in tickers:
-        df = pan.DataReader(each_ticker, 'av-daily', start, end, 
+        df = pan.DataReader(each_ticker.ticker, 'av-daily', start, end, 
         api_key="pk_ab6548b1284345368ccec6e806e70415")['close']
 
         per_ticker = df.pct_change()
-        x = percomp_FB.mean()
-        y = percomp_FB.std()
-
-        data_list.append((x,y))
-
         
+        reTurn = round(per_ticker.mean(),5)
+        reTurn_list.append(reTurn)
+        max_ReTurn= max(reTurn_list)
+        
+        risk = round(per_ticker.std(),5)
+        risk_list.append(risk)
+        max_risk= max(risk_list)
 
-    return jsonify(data_list)
+        data_list.append({"x":reTurn, "y":risk})
+
+
+    data_dict = {
+
+        # "labels": dates,
+        "datasets": [
+            {
+                # "label": false,
+                "backgroundColor": 'rgb(144,238,144)',
+                "borderColor": 'rgb(144,238,144)',
+                "data":data_list
+               }
+        ]
+    }  
+
+    return jsonify(data_dict)
 
 
 if __name__ == "__main__":
