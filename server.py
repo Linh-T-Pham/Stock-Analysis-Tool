@@ -174,6 +174,24 @@ def add_to_profolio():
     # return render_template("myportfolio.html", companies=user.companies)
     return redirect("/user_stock")
 
+@app.route("/user_stock")
+def add_stock():
+
+    user = User.query.get(session['user_id'])
+    tickers = user.companies
+
+    response_list = []
+
+    for each_ticker in tickers:
+
+        api = requests.get("https://cloud.iexapis.com/stable/stock/"+ each_ticker.ticker +"/quote?token=pk_ab6548b1284345368ccec6e806e70415")   
+        ticker_api = api.json()
+        response_list.append(ticker_api)
+
+
+
+    return render_template("myportfolio.html",
+                            ticker_data=response_list)
 
 
 @app.route("/correlation.json")
@@ -245,25 +263,31 @@ def analyze_corr():
     
     return jsonify(data_dict)
 
-@app.route("/user_stock")
-def add_stock():
 
+@app.route("/risk_return_analysis")
+def create_risk_return():
+
+    """Pull all tickers for that user"""
     user = User.query.get(session['user_id'])
     tickers = user.companies
-
-    response_list = []
-
+    
+    start = dt.datetime(2019, 10, 15)
+    end = dt.datetime(2019, 11, 15)
+    
+    data_list = []
     for each_ticker in tickers:
+        df = pan.DataReader(each_ticker, 'av-daily', start, end, 
+        api_key="pk_ab6548b1284345368ccec6e806e70415")['close']
 
-        api = requests.get("https://cloud.iexapis.com/stable/stock/"+ each_ticker.ticker +"/quote?token=pk_ab6548b1284345368ccec6e806e70415")   
-        ticker_api = api.json()
-        response_list.append(ticker_api)
+        per_ticker = df.pct_change()
+        x = percomp_FB.mean()
+        y = percomp_FB.std()
 
+        data_list.append((x,y))
 
+        
 
-    return render_template("myportfolio.html",
-                            ticker_data=response_list)
-
+    return jsonify(data_list)
 
 
 if __name__ == "__main__":
