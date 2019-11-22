@@ -219,6 +219,7 @@ def analyze_corr():
     ticker1_dict = per_ticker1.to_dict()
     
     dataset1 = {"label":ticker1, 
+                "borderColor": "blue",
                 "data": []}
     # dates = []
     for d1, per1 in ticker1_dict.items():
@@ -231,6 +232,7 @@ def analyze_corr():
 
     ticker2_dict = per_ticker2.to_dict()
     dataset2 = {"label": ticker2,
+                "borderColor": "green",
                 "data": []}
     
     for d2, per2 in ticker2_dict.items():
@@ -275,6 +277,7 @@ def create_risk_return():
     reTurn_list = []
     risk_list =[]
     data_list = []
+
     for each_ticker in tickers:
         df = pan.DataReader(each_ticker.ticker, 'av-daily', start, end, 
         api_key="pk_ab6548b1284345368ccec6e806e70415")['close']
@@ -291,21 +294,24 @@ def create_risk_return():
 
         data_list.append({"x":reTurn, "y":risk})
 
+    return render_template("myportfolio.html",
+        )
 
-    data_dict = {
 
-        # "labels": dates,
-        "datasets": [
-            {
-                # "label": false,
-                "backgroundColor": 'rgb(144,238,144)',
-                "borderColor": 'rgb(144,238,144)',
-                "data":data_list
-               }
-        ]
-    }  
+    # data_dict = {
 
-    return jsonify(data_dict)
+    #     # "labels": dates,
+    #     "datasets": [
+    #         {
+    #             # "label": false,
+    #             "backgroundColor": 'rgb(144,238,144)',
+    #             "borderColor": 'rgb(144,238,144)',
+    #             "data":data_list
+    #            }
+    #     ]
+    # }  
+
+    # return jsonify(data_dict)
 
 
 if __name__ == "__main__":
