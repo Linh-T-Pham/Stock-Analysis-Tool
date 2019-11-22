@@ -204,10 +204,9 @@ def analyze_corr():
     
     dataset1 = {"label":ticker1, 
                 "data": []}
-    dates = []
+    # dates = []
     for d1, per1 in ticker1_dict.items():
         if d1 != "2019-10-15":
-            dates.append(d1)
             dataset1["data"].append({"x":d1, "y":per1})
     
     datasets.append(dataset1)
@@ -240,7 +239,6 @@ def analyze_corr():
 
 
     data_dict = {
-        "labels": dates,
         "datasets": datasets
     }
     print(data_dict)
