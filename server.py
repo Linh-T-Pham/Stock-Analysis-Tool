@@ -28,6 +28,18 @@ def index():
     return render_template("charts.html")
 
 
+#       .--.             .---.
+#         /:.  '.         .' ..  '._.---.
+#        /:::-.  \.-"""-;` .-:::.     .::\
+#       /::'|  `\/  _ _  \'   `\:'   ::::|
+#   __.'    |   /  (o|o)  \     `'.   ':/
+#  /    .:. /   |   ___   |        '---'
+# |    ::::'   /:  (._.) .:\
+# \    .='    |:'        :::|
+#  `""`       \     .-.   ':/
+#        jgs   '---`|I|`---'
+#                   '-'
+
 @app.route('/chart.json')
 def get_chart():
    
@@ -53,6 +65,18 @@ def get_chart():
   
     return jsonify(data_dict)
 
+
+#       .--.             .---.
+#         /:.  '.         .' ..  '._.---.
+#        /:::-.  \.-"""-;` .-:::.     .::\
+#       /::'|  `\/  _ _  \'   `\:'   ::::|
+#   __.'    |   /  (o|o)  \     `'.   ':/
+#  /    .:. /   |   ___   |        '---'
+# |    ::::'   /:  (._.) .:\
+# \    .='    |:'        :::|
+#  `""`       \     .-.   ':/
+#        jgs   '---`|I|`---'
+                  # '-'
  
 @app.route('/variation.json')
 def daily_price_variation():
@@ -90,6 +114,17 @@ def daily_price_variation():
 
     return jsonify(data_dict)
 
+#       .--.             .---.
+#         /:.  '.         .' ..  '._.---.
+#        /:::-.  \.-"""-;` .-:::.     .::\
+#       /::'|  `\/  _ _  \'   `\:'   ::::|
+#   __.'    |   /  (o|o)  \     `'.   ':/
+#  /    .:. /   |   ___   |        '---'
+# |    ::::'   /:  (._.) .:\
+# \    .='    |:'        :::|
+#  `""`       \     .-.   ':/
+#        jgs   '---`|I|`---'
+#                   '-'
 
 @app.route("/login", methods=["GET"])
 def login_form():
@@ -152,6 +187,18 @@ def logout():
     return redirect("/charts")
 
 
+#       .--.             .---.
+#         /:.  '.         .' ..  '._.---.
+#        /:::-.  \.-"""-;` .-:::.     .::\
+#       /::'|  `\/  _ _  \'   `\:'   ::::|
+#   __.'    |   /  (o|o)  \     `'.   ':/
+#  /    .:. /   |   ___   |        '---'
+# |    ::::'   /:  (._.) .:\
+# \    .='    |:'        :::|
+#  `""`       \     .-.   ':/
+#        jgs   '---`|I|`---'
+#                   '-'
+
 @app.route("/add_portfolio", methods=['POST'])
 def add_to_profolio():
     """Users enter a ticker on the chart page and add it to their portfolio"""
@@ -192,10 +239,23 @@ def add_stock():
                             ticker_data=response_list)
 
 
+#       .--.             .---.
+#         /:.  '.         .' ..  '._.---.
+#        /:::-.  \.-"""-;` .-:::.     .::\
+#       /::'|  `\/  _ _  \'   `\:'   ::::|
+#   __.'    |   /  (o|o)  \     `'.   ':/
+#  /    .:. /   |   ___   |        '---'
+# |    ::::'   /:  (._.) .:\
+# \    .='    |:'        :::|
+#  `""`       \     .-.   ':/
+#        jgs   '---`|I|`---'
+#                   '-'
+
+
 @app.route("/correlation.json")
 def analyze_corr():
     """Correlate two companies"""
-    print("YAYAYAYAY \n\n\n\n\n")
+   
     ticker1 = request.args.get("ticker1")
     
     ticker2 = request.args.get("ticker2")
@@ -220,8 +280,10 @@ def analyze_corr():
     
     dataset1 = {"label":ticker1, 
                 "borderColor": "blue",
+                "showLine":False,
+                "pointRadius": 7,
                 "data": []}
-    # dates = []
+   
     for d1, per1 in ticker1_dict.items():
         if d1 != "2019-10-15":
             dataset1["data"].append({"x":d1, "y":per1})
@@ -231,9 +293,13 @@ def analyze_corr():
     
 
     ticker2_dict = per_ticker2.to_dict()
-    dataset2 = {"label": ticker2,
+    dataset2 = {
+                "label": ticker2,
                 "borderColor": "green",
-                "data": []}
+                "showLine":False,
+                "pointRadius": 7,
+                "data": []
+                }
     
     for d2, per2 in ticker2_dict.items():
         if d2 != "2019-10-15":
@@ -242,10 +308,6 @@ def analyze_corr():
     datasets.append(dataset2)
 
 
-
-    
-    # ticker2_list = per_ticker2.to_dict()
-    # print(per_ticker2)
     # for i, price in enumerate(per_ticker1.to_list()):
     #     print(price, type(price))
     #     if i == 0: 
@@ -263,6 +325,18 @@ def analyze_corr():
     
     return jsonify(data_dict)
 
+#       .--.             .---.
+#         /:.  '.         .' ..  '._.---.
+#        /:::-.  \.-"""-;` .-:::.     .::\
+#       /::'|  `\/  _ _  \'   `\:'   ::::|
+#   __.'    |   /  (o|o)  \     `'.   ':/
+#  /    .:. /   |   ___   |        '---'
+# |    ::::'   /:  (._.) .:\
+# \    .='    |:'        :::|.
+#  `""`       \     .-.   ':/
+#        jgs   '---`|I|`---'
+#                   '-'
+
 
 @app.route("/risk_return_analysis.json")
 def create_risk_return():
@@ -277,10 +351,12 @@ def create_risk_return():
     reTurn_list = []
     risk_list =[]
     data_list = []
+    ticker_list = []
 
     for each_ticker in tickers:
         df = pan.DataReader(each_ticker.ticker, 'av-daily', start, end, 
         api_key="pk_ab6548b1284345368ccec6e806e70415")['close']
+
 
         per_ticker = df.pct_change()
         
@@ -293,25 +369,19 @@ def create_risk_return():
         max_risk= max(risk_list)
 
         data_list.append({"x":reTurn, "y":risk})
+        print(data_list)
+        ticker_list.append(each_ticker.ticker)
 
-    return render_template("myportfolio.html",
-        )
 
+    data_dict = {
 
-    # data_dict = {
+        "label":ticker_list,
+        "datasets": reTurn_list
+    }
+    
+    print(data_dict)
 
-    #     # "labels": dates,
-    #     "datasets": [
-    #         {
-    #             # "label": false,
-    #             "backgroundColor": 'rgb(144,238,144)',
-    #             "borderColor": 'rgb(144,238,144)',
-    #             "data":data_list
-    #            }
-    #     ]
-    # }  
-
-    # return jsonify(data_dict)
+    return jsonify(data_dict)
 
 
 if __name__ == "__main__":
