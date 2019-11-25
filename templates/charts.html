@@ -12,7 +12,7 @@
   <div class="topnav">
       <label>Enter a ticker:
         <input type="ticker" name="ticker" required class="form-control">
-    <input type="submit" value="ADD TO MY PROFOLIO" id="my-profolio">  
+    <input type="submit" value="ADD TO MY PORTFOLIO" id="my-profolio">  
   </div>
 </form><br>
 
@@ -26,7 +26,7 @@
     <option value="AAPL">Apple</option>
     <option value="MSFT">Microsoft</option>
   </select>
-  <input type="submit" value="VIEW CHARTS" id="ticker-submit"><br><br>
+  <input type="submit" value="VIEW CHART" id="ticker-submit"><br><br>
 </form>
 
 
@@ -87,6 +87,17 @@
             },
             options: {
             responsive: true,
+
+            tooltips: {
+              callbacks: {
+                label: function(tooltipItem, data) {
+                  return "$" + Number(tooltipItem.yLabel).toFixed(0).replace(/./g, function(c, i, a) {
+                    return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
+                        });
+                      }
+                    }
+
+                 },
             scales: {
               yAxes: [{
                 ticks: {
@@ -110,6 +121,15 @@
              }],
               
               xAxes: [{
+
+                type: "time",
+                time: {
+                  displayFormats :{
+                    month: "MMM DD"
+                  }
+
+                },
+
                 ticks: {
                   frontFamily: "Roboto Mono",
                   frontcolor: "red",
@@ -124,6 +144,7 @@
                   drawTicks: false,
                   drawBorder: false
               }
+             
              }]
             }
           }
@@ -145,6 +166,21 @@
                   data: data,
                   options: {
                   responsive: true,
+
+                  tooltips: {
+                    mode: 'label',
+                    callbacks: {
+                      label: function(tooltipItem, data) {
+                        return data['datasets'][0]['data'][tooltipItem['index']] + '%';
+                      }
+                    },
+                    
+                    xDateFormat: '%Y-%m-%d',
+                    shared: true,
+                    valueDecimals: 2
+
+                  },
+
                   title:{
                     display:true,
                     text: "DAILY PRICE VARIATION IN PERCENTAGE"
@@ -170,9 +206,16 @@
                       }
                     }],
                     xAxes: [{
+                      type: "time",
+                      time: {
+                      displayFormats :{
+                      month: "MMM DD"
+                      }
+
+                      },
+
                       ticks: {
-                        frontFamily: "Roboto Mono",
-                        frontcolor: "#FFFFFF",
+                        fontcolor: "green",
                         frontStyle: "bold",
                         beginatZero: true,
                         maxTicksLimit: 10,
