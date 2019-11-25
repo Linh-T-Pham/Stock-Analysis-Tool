@@ -20,8 +20,18 @@ app.secret_key = "ABC"
 
 app.jinja_env.undefined = StrictUndefined
 
+@app.route('/about')
+def get_company_info():
 
-@app.route('/charts')
+    ticker = request.args.get('ticker')
+
+    api_request = requests.get("https://cloud.iexapis.com/stable/stock/"+ ticker + "/company/quote?token=pk_ab6548b1284345368ccec6e806e70415")
+    ticker_api = api_request.json()
+
+    return render_template("homepage.html", ticker=ticker, ticker_api = ticker_api)
+
+
+@app.route('/')
 def index():
     
 
