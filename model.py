@@ -12,7 +12,7 @@ class User(db.Model):
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     fname = db.Column(db.String(20), nullable=True)
     lname = db.Column(db.String(20), nullable=True)
-    email = db.Column(db.String(30), nullable=True)
+    email = db.Column(db.String(30), nullable=True, unique = True)
     password = db.Column(db.String(100), nullable=True)
 
 
@@ -47,6 +47,11 @@ class User_Company(db.Model):
     user_comp_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
     ticker = db.Column(db.String(10),db.ForeignKey("companies.ticker"))
+    # date of purchase 
+    # number of shares 
+    # 
+
+
 
     def __repr__(self):
 
