@@ -6,20 +6,7 @@ from server import app
 
 
 
-# def load_users():
-  
-
-#     user = User(user_id=user_id,
-#                 fname=fname,
-#                 lname=lname,
-#                 email=email)
-    
-#     db.session.add(user)
-    
-#     db.session.commit()
-
-
-def load_company():
+def load_company(name_dict):
 
     db.create_all()
 
@@ -58,21 +45,6 @@ def load_company():
     
         db.session.commit()
 
-
-
-# def load_users_company(ticker):
-  
-#     data_by_ticker = request_api(ticker)
-    
-
-#     user_company = User_Company(user_company_id=user_company_id,
-#                                 user_id=user_id,
-#                                 ticker=ticker)
- 
-
-    # db.session.add(user_company)
-    
-    # db.session.commit()
 
 
 if __name__ == "__main__":
