@@ -30,6 +30,18 @@ def get_company_info():
 
     return render_template("homepage.html", ticker=ticker, ticker_api = ticker_api)
 
+#       .--.             .---.
+#         /:.  '.         .' ..  '._.---.
+#        /:::-.  \.-"""-;` .-:::.     .::\
+#       /::'|  `\/  _ _  \'   `\:'   ::::|
+#   __.'    |   /  (o|o)  \     `'.   ':/
+#  /    .:. /   |   ___   |        '---'
+# |    ::::'   /:  (._.) .:\
+# \    .='    |:'        :::|
+#  `""`       \     .-.   ':/
+#        jgs   '---`|I|`---'
+#                   '-'
+
 
 @app.route('/')
 def index():
@@ -197,17 +209,6 @@ def logout():
     return redirect("/charts")
 
 
-#       .--.             .---.
-#         /:.  '.         .' ..  '._.---.
-#        /:::-.  \.-"""-;` .-:::.     .::\
-#       /::'|  `\/  _ _  \'   `\:'   ::::|
-#   __.'    |   /  (o|o)  \     `'.   ':/
-#  /    .:. /   |   ___   |        '---'
-# |    ::::'   /:  (._.) .:\
-# \    .='    |:'        :::|
-#  `""`       \     .-.   ':/
-#        jgs   '---`|I|`---'
-#                   '-'
 
 @app.route("/add_portfolio", methods=['POST'])
 def add_to_profolio():
@@ -248,18 +249,11 @@ def add_stock():
     return render_template("myportfolio.html",
                             ticker_data=response_list)
 
+@app.route("/user_portfolio")
+def go_to_portfolio():
 
-#       .--.             .---.
-#         /:.  '.         .' ..  '._.---.
-#        /:::-.  \.-"""-;` .-:::.     .::\
-#       /::'|  `\/  _ _  \'   `\:'   ::::|
-#   __.'    |   /  (o|o)  \     `'.   ':/
-#  /    .:. /   |   ___   |        '---'
-# |    ::::'   /:  (._.) .:\
-# \    .='    |:'        :::|
-#  `""`       \     .-.   ':/
-#        jgs   '---`|I|`---'
-#                   '-'
+    return redirect("/user_stock")
+
 
 
 @app.route("/correlation.json")
@@ -335,17 +329,6 @@ def analyze_corr():
     
     return jsonify(data_dict)
 
-#       .--.             .---.
-#         /:.  '.         .' ..  '._.---.
-#        /:::-.  \.-"""-;` .-:::.     .::\
-#       /::'|  `\/  _ _  \'   `\:'   ::::|
-#   __.'    |   /  (o|o)  \     `'.   ':/
-#  /    .:. /   |   ___   |        '---'
-# |    ::::'   /:  (._.) .:\
-# \    .='    |:'        :::|.
-#  `""`       \     .-.   ':/
-#        jgs   '---`|I|`---'
-#                   '-'
 
 
 @app.route("/risk_return_analysis.json")
@@ -372,26 +355,72 @@ def create_risk_return():
         
         reTurn = round(per_ticker.mean(),5)
         reTurn_list.append(reTurn)
+
         max_ReTurn= max(reTurn_list)
         
         risk = round(per_ticker.std(),5)
         risk_list.append(risk)
+
         max_risk= max(risk_list)
 
-        data_list.append({"x":reTurn, "y":risk})
-        print(data_list)
+        data_list.append({"x":reTurn, "y":risk})      
         ticker_list.append(each_ticker.ticker)
 
 
     data_dict = {
 
-        "label":ticker_list,
-        "datasets": reTurn_list
+        "datasets": [{
+            "label": "Hi",
+            "showLine":False,
+            "borderColor": "blue",
+            "pointRadius": 7,
+            "data": data_list
+        }]
+
     }
     
-    print(data_dict)
-
     return jsonify(data_dict)
+
+@app.route("/risk_return_table")
+def create_r_table():
+    user = User.query.get(session['user_id'])
+    tickers = user.companies
+    
+    start = dt.datetime(2018, 10, 15)
+    end = dt.datetime(2019, 11, 22)
+    
+    reTurn_list = []
+    risk_list =[]
+    ticker_list = []
+
+    new_dict1 = {}
+    new_dict2 = {}
+
+    for each_ticker in tickers:
+        df = pan.DataReader(each_ticker.ticker, 'av-daily', start, end, 
+        api_key="pk_ab6548b1284345368ccec6e806e70415")['close']
+
+
+        per_ticker = df.pct_change()
+        
+        reTurn = round(per_ticker.mean(),5)
+        reTurn_list.append(reTurn)
+
+        max_ReTurn= max(reTurn_list)
+        
+        risk = round(per_ticker.std(),5)
+        risk_list.append(risk)
+
+        max_risk= max(risk_list)    
+        ticker_list.append(each_ticker.ticker)
+
+        new_dict1 = dict(zip(ticker_list, risk_list))
+        new_dict2 = dict(zip(ticker_list, reTurn_list))
+
+    return render_template("myportfolio.html", 
+                           risk_list=risk_list, reTurn_list=reTurn_list)
+
+
 
 
 if __name__ == "__main__":
