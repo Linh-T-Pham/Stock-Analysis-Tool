@@ -245,9 +245,43 @@ def add_stock():
         api = requests.get("https://cloud.iexapis.com/stable/stock/"+ each_ticker.ticker +"/quote?token=pk_ab6548b1284345368ccec6e806e70415")   
         ticker_api = api.json()
         response_list.append(ticker_api)
+    
+    start = dt.datetime(2019, 10, 15)
+    end = dt.datetime(2019, 11, 22)
+    
+    reTurn_list = []
+    risk_list =[]
+    ticker_list = []
+
+
+    for each_ticker in tickers:
+        df = pan.DataReader(each_ticker.ticker, 'av-daily', start, end, 
+        api_key="pk_ab6548b1284345368ccec6e806e70415")['close']
+
+
+        per_ticker = df.pct_change()
+        
+        reTurn = round(per_ticker.mean(),5)
+        reTurn_list.append(reTurn)
+
+        max_ReTurn= max(reTurn_list)
+        
+        risk = round(per_ticker.std(),5)
+        risk_list.append(risk)
+
+        max_risk= max(risk_list)    
+        ticker_list.append(each_ticker.ticker)
+
+    new_dict1 = dict(zip(ticker_list, risk_list))
+    new_dict2 = dict(zip(ticker_list, reTurn_list))
+
+
 
     return render_template("myportfolio.html",
-                            ticker_data=response_list)
+                            ticker_data=response_list,
+                            new_dict2=new_dict2,
+                            new_dict1=new_dict1)
+
 
 @app.route("/user_portfolio")
 def go_to_portfolio():
@@ -338,7 +372,7 @@ def create_risk_return():
     user = User.query.get(session['user_id'])
     tickers = user.companies
     
-    start = dt.datetime(2018, 10, 15)
+    start = dt.datetime(2019, 10, 15)
     end = dt.datetime(2019, 11, 22)
     
     reTurn_list = []
@@ -380,46 +414,6 @@ def create_risk_return():
     }
     
     return jsonify(data_dict)
-
-@app.route("/risk_return_table")
-def create_r_table():
-    user = User.query.get(session['user_id'])
-    tickers = user.companies
-    
-    start = dt.datetime(2018, 10, 15)
-    end = dt.datetime(2019, 11, 22)
-    
-    reTurn_list = []
-    risk_list =[]
-    ticker_list = []
-
-    new_dict1 = {}
-    new_dict2 = {}
-
-    for each_ticker in tickers:
-        df = pan.DataReader(each_ticker.ticker, 'av-daily', start, end, 
-        api_key="pk_ab6548b1284345368ccec6e806e70415")['close']
-
-
-        per_ticker = df.pct_change()
-        
-        reTurn = round(per_ticker.mean(),5)
-        reTurn_list.append(reTurn)
-
-        max_ReTurn= max(reTurn_list)
-        
-        risk = round(per_ticker.std(),5)
-        risk_list.append(risk)
-
-        max_risk= max(risk_list)    
-        ticker_list.append(each_ticker.ticker)
-
-        new_dict1 = dict(zip(ticker_list, risk_list))
-        new_dict2 = dict(zip(ticker_list, reTurn_list))
-
-    return render_template("myportfolio.html", 
-                           risk_list=risk_list, reTurn_list=reTurn_list)
-
 
 
 
