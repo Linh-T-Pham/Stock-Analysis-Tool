@@ -23,23 +23,23 @@ class FlaskTests(TestCase):
         self.assertEqual(result.status_code, 200)
         self.assertIn(b'<h3>Current Market Data</h3>', result.data)
 
-# class FlaskTestsDatabase(TestCase):
-#     def setUp(self):
-#         self.client = app.test_client()
-#         app.config['TESTING'] = True
-#         app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+class FlaskTestsDatabase(TestCase):
+    def setUp(self):
+        self.client = app.test_client()
+        app.config['TESTING'] = True
+        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-#         connect_to_db(app, db_uri='postgresql:///testdb')
+        connect_to_db(app, db_uri='postgresql:///testdb')
 
-#         db.create_all()
-#         #currenty example_data doesn't exist
-#         example_data() #write function in model.py that creates test data for each table
+        db.create_all()
+        #currenty example_data doesn't exist
+        example_data() #write function in model.py that creates test data for each table
 
-#         def tearDown(self):
-#             db.session.close()
-#             db.drop_all()
+        def tearDown(self):
+            db.session.close()
+            db.drop_all()
 
-#         #write tests here
+        #write tests here
 
 
 
