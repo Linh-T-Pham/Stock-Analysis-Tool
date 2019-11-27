@@ -380,8 +380,8 @@ def create_risk_return():
     start = dt.datetime(2019, 10, 15)
     end = dt.datetime(2019, 11, 22)
     
-    # reTurn_list = []
-    # risk_list =[]
+    reTurn_list = []
+    risk_list =[]
     data_list = []
     ticker_list = []
 
@@ -393,12 +393,12 @@ def create_risk_return():
         per_ticker = df.pct_change()
         
         reTurn = round(per_ticker.mean(),5)
-        # reTurn_list.append(reTurn)
+        reTurn_list.append(reTurn)
 
         max_ReTurn= max(reTurn_list)
         
         risk = round(per_ticker.std(),5)
-        # risk_list.append(risk)
+        risk_list.append(risk)
 
         max_risk= max(risk_list)
 
