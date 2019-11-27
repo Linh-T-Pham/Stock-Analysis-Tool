@@ -6,16 +6,15 @@ from server import app
 
 
 
-def load_company(name_dict):
+def load_company():
 
     db.create_all()
 
-    name_dict = { "MSFT":"Microsoft" ,
-                "PYPl" : "PayPal",
-                "NVDA": "Nvidia",
-                "CRM" : "Salesforce", 
-                "TWLO": "Twilio",
-                "AAPL" : "Apple" }
+    name_dict = { 
+                  "V":"Visa",
+                "VZ":"Verizon",
+                "WMT":"Wal_Mart",
+                "DIS": "Walt Disney" }
                
 
     for ticker, name in name_dict.items():
@@ -23,7 +22,7 @@ def load_company(name_dict):
 
         db.session.add(company)
 
-        data_by_ticker = request_api(ticker, 2019)
+        data_by_ticker = get_ticker_data(ticker, 2019)
 
         for date, value in data_by_ticker.items():
             date = date
