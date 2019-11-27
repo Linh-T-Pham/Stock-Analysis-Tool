@@ -2,10 +2,7 @@ from unittest import TestCase
 from server import app
 from model import connect_to_db, db, User, Company, User_Company, DailyPrice
 # from flask import session 
-# import os 
-# import tempfile
-# import pytest 
-# from flaskr import flaskr 
+
 
 
 class FlaskTests(TestCase):
@@ -20,7 +17,11 @@ class FlaskTests(TestCase):
         self.assertEqual(result.status_code, 200)
         self.assertIn(b"<label>Enter a ticker", result.data)
 
-class 
+    def test_userstock(self):
+
+        result = self.client.get("/user_stock")
+        self.assertEqual(result.status_code, 200)
+        self.assertIn(b'<h3>Current Market Data</h3>', result.data)
 
 # class FlaskTestsDatabase(TestCase):
 #     def setUp(self):
