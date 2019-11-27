@@ -33,7 +33,6 @@
     <option value="KO">Coca-Cola</option>
     <option value="DD">DuPont</option>
     <option value="XOM">ExxonMobil</option>
-    <option value="GE">General Electric</option>
     <option value="GS">Goldman Sachs</option>
     <option value="HD">Home Depot</option>
     <option value="IBM">IBM</option>
@@ -48,19 +47,14 @@
     <option value="DIS">Walt Disney</option>
     <option value="NKE">Nike</option>
    
-
-    
-
   </select>
   <input type="submit" value="VIEW CHART" id="ticker-submit"><br><br>
 </form>
-
 
   <div class="Company">
     <canvas id="lineChart"></canvas>
     <div id="lineLegend" class="chart-legend"></div>
   </div>
-
 
   <div class="Company">
     <canvas id="BarChart"></canvas>
@@ -68,7 +62,6 @@
   </div>
 
   <script>
-
 
     const lineChartEl = $("#lineChart").get(0);
 
@@ -113,6 +106,12 @@
             },
             options: {
             responsive: true,
+            legend:{
+                    display: false
+                  },
+            title:{
+                    display:true,
+                    text: "DAILY PRICE IN 2019"},
 
             tooltips: {
               callbacks: {
@@ -192,6 +191,9 @@
                   data: data,
                   options: {
                   responsive: true,
+                  legend:{
+                    display: false
+                  },
 
                   tooltips: {
                     mode: 'label',
