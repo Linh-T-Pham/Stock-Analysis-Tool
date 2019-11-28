@@ -4,7 +4,6 @@
 
 {% block content %}
 
-<br>
 <!DOCTYPE html>
 <html>
 <body>
@@ -12,10 +11,12 @@
   <div class="topnav">
       <label>Enter a ticker:
         <input type="ticker" name="ticker" required class="form-control">
-    <input type="submit" value="ADD TO MY PORTFOLIO" id="my-profolio">  
+        <input type="submit" value="ADD TO MY PORTFOLIO" id="my-profolio"> 
   </div>
 </form><br>
 
+<!-- Udpated the link after storing the data in database. On seed_data.py, change the name dict 
+with old ticker and company name to new ones. Then on the terminal, run seed_data.py and call the fct load_company() -->
 <form id="chart-form">
   <select name="comp" id="comp-field" >
     <option value = ""></option>
@@ -177,7 +178,7 @@
           }
         );
 
-        $("#lineLegend").html(compChart);
+        $("#lineLegend").html(compChart.generateLegend());
       });
 
       // CREATE DAILY PRICE VARIATION CHART
