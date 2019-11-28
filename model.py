@@ -25,7 +25,6 @@ class User(db.Model):
 
         return f"<User user_id={self.user_id} first_name={self.fname} last_name={self.lname}>"
 
-
 class Company(db.Model):
     """Create companies table"""
 
@@ -38,7 +37,6 @@ class Company(db.Model):
 
         return f"<Company ticker={self.ticker} company_name={self.name}>"
 
-
 class User_Company(db.Model):
     """Create user_comapny tables to establish relationship"""
 
@@ -47,11 +45,7 @@ class User_Company(db.Model):
     user_comp_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
     ticker = db.Column(db.String(10),db.ForeignKey("companies.ticker"))
-    # date of purchase 
-    # number of shares 
-    # 
-
-
+  
 
     def __repr__(self):
 
@@ -83,11 +77,11 @@ class DailyPrice(db.Model):
 ##############################################################################
 # Helper functions
 
-def connect_to_db(app):
+def connect_to_db(app, db_uri="postgresql:///stocks"):
     """Connect the database to our Flask app."""
 
     # Configure to use our PostgreSQL database
-    app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql:///stocks"
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_ECHO'] = True
     db.app = app

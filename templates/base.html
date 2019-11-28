@@ -24,28 +24,29 @@
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="/">Stock Analysis Tool</a>
+  <a class="navbar-brand" href="/">Stock Analysis</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
-  <div action="/user_portfolio" class="collapse navbar-collapse" id="navbarSupportedContent">
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="#">User Portfolio<span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="#">About<span class="sr-only">(current)</span></a>
       </li>
     </ul>
     
-    <form action ="/about" class="form-inline my-2 my-lg-0" method="GET"> 
+  <form action ="/search" class="form-inline my-2 my-lg-0" method="GET"> 
       <input class="form-control mr-sm-2" type="search" placeholder="Get Company Info" aria-label="Search" name="ticker">
       <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Search</button>
+  </form>
+  
+    
+  <ul class="nav navbar-nav navbar-right"> 
+    <form action="/login" class="fas fa-sign-in-alt">
+      <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Login</button>
     </form>
-     
-    <ul class="nav navbar-nav navbar-right">
-      <li class ="nav-item">
-      <a class="nav-link" href="#"><span class="fas fa-sign-in-alt"></span>Login</a>
-      </li>
-    </ul>
+  </ul>
 
 
   </div>
