@@ -8,15 +8,14 @@ from model import connect_to_db, db, User, User_Company, Company, DailyPrice
 import datetime as dt
 import json
 import pandas_datareader.data as pan
+from pandas_datareader._utils import RemoteDataError
 import datetime 
 import requests
-
 
 app = Flask(__name__)
 
 # Required to use Flask sessions and the debug toolbar
 app.secret_key = "ABC"
-
 
 app.jinja_env.undefined = StrictUndefined
 
@@ -30,37 +29,10 @@ def get_company_info():
 
     return render_template("homepage.html", ticker=ticker, ticker_api = ticker_api)
 
-#       .--.             .---.
-#         /:.  '.         .' ..  '._.---.
-#        /:::-.  \.-"""-;` .-:::.     .::\
-#       /::'|  `\/  _ _  \'   `\:'   ::::|
-#   __.'    |   /  (o|o)  \     `'.   ':/
-#  /    .:. /   |   ___   |        '---'
-# |    ::::'   /:  (._.) .:\
-# \    .='    |:'        :::|
-#  `""`       \     .-.   ':/
-#        jgs   '---`|I|`---'
-#                   '-'
-
-
 @app.route('/')
 def index():
     
-
     return render_template("charts.html")
-
-
-#       .--.             .---.
-#         /:.  '.         .' ..  '._.---.
-#        /:::-.  \.-"""-;` .-:::.     .::\
-#       /::'|  `\/  _ _  \'   `\:'   ::::|
-#   __.'    |   /  (o|o)  \     `'.   ':/
-#  /    .:. /   |   ___   |        '---'
-# |    ::::'   /:  (._.) .:\
-# \    .='    |:'        :::|
-#  `""`       \     .-.   ':/
-#        jgs   '---`|I|`---'
-#                   '-'
 
 @app.route('/chart.json')
 def get_chart():
@@ -87,18 +59,6 @@ def get_chart():
   
     return jsonify(data_dict)
 
-
-#       .--.             .---.
-#         /:.  '.         .' ..  '._.---.
-#        /:::-.  \.-"""-;` .-:::.     .::\
-#       /::'|  `\/  _ _  \'   `\:'   ::::|
-#   __.'    |   /  (o|o)  \     `'.   ':/
-#  /    .:. /   |   ___   |        '---'
-# |    ::::'   /:  (._.) .:\
-# \    .='    |:'        :::|
-#  `""`       \     .-.   ':/
-#        jgs   '---`|I|`---'
-                  # '-'
  
 @app.route('/variation.json')
 def daily_price_variation():
@@ -136,17 +96,6 @@ def daily_price_variation():
 
     return jsonify(data_dict)
 
-#       .--.             .---.
-#         /:.  '.         .' ..  '._.---.
-#        /:::-.  \.-"""-;` .-:::.     .::\
-#       /::'|  `\/  _ _  \'   `\:'   ::::|
-#   __.'    |   /  (o|o)  \     `'.   ':/
-#  /    .:. /   |   ___   |        '---'
-# |    ::::'   /:  (._.) .:\
-# \    .='    |:'        :::|
-#  `""`       \     .-.   ':/
-#        jgs   '---`|I|`---'
-#                   '-'
 
 @app.route("/login", methods=["GET"])
 def login_form():
@@ -199,7 +148,7 @@ def login_process():
     session["user_id"] = user.user_id
 
     flash("Logged in")
-    return redirect("/charts")
+    return redirect("/")
 
 
 @app.route("/logout")
@@ -207,7 +156,6 @@ def logout():
     del session["user_id"]
     flash("Logged Out.")
     return redirect("/charts")
-
 
 
 @app.route("/add_portfolio", methods=['POST'])
@@ -246,8 +194,8 @@ def add_stock():
         ticker_api = api.json()
         response_list.append(ticker_api)
     
-    start = dt.datetime(2019, 10, 15)
-    end = dt.datetime(2019, 11, 22)
+    start = dt.datetime(2019, 11, 10)
+    end = dt.datetime(2019, 11, 26)
     
     reTurn_list = []
     risk_list =[]
@@ -287,12 +235,10 @@ def add_stock():
                             max1 = max1,
                             max2 = max2)
 
-
 @app.route("/user_portfolio")
 def go_to_portfolio():
 
     return redirect("/user_stock")
-
 
 
 @app.route("/correlation.json")
@@ -305,8 +251,8 @@ def analyze_corr():
 
     #set the time frame to fetch stock data
     
-    start = dt.datetime(2019, 10, 15)
-    end = dt.datetime(2019, 11, 15)
+    start = dt.datetime(2019, 10, 26)
+    end = dt.datetime(2019, 11, 23)
 
     df1 = pan.DataReader(ticker1, 'av-daily', start, end, 
         api_key="pk_ab6548b1284345368ccec6e806e70415")['close']
@@ -328,12 +274,11 @@ def analyze_corr():
                 "data": []}
    
     for d1, per1 in ticker1_dict.items():
-        if d1 != "2019-10-15":
+        if d1 != "2019-10-28":
             dataset1["data"].append({"x":d1, "y":per1})
     
     datasets.append(dataset1)
 
-    
 
     ticker2_dict = per_ticker2.to_dict()
     dataset2 = {
@@ -345,11 +290,10 @@ def analyze_corr():
                 }
     
     for d2, per2 in ticker2_dict.items():
-        if d2 != "2019-10-15":
+        if d2 != "2019-10-28":
             dataset2["data"].append({"x":d2, "y":per2})
 
     datasets.append(dataset2)
-
 
     # for i, price in enumerate(per_ticker1.to_list()):
     #     print(price, type(price))
@@ -369,7 +313,6 @@ def analyze_corr():
     return jsonify(data_dict)
 
 
-
 @app.route("/risk_return_analysis.json")
 def create_risk_return():
 
@@ -377,8 +320,8 @@ def create_risk_return():
     user = User.query.get(session['user_id'])
     tickers = user.companies
     
-    start = dt.datetime(2019, 10, 15)
-    end = dt.datetime(2019, 11, 22)
+    start = dt.datetime(2019, 11, 10)
+    end = dt.datetime(2019, 11, 26)
     
     reTurn_list = []
     risk_list =[]
@@ -395,21 +338,18 @@ def create_risk_return():
         reTurn = round(per_ticker.mean(),5)
         reTurn_list.append(reTurn)
 
-        max_ReTurn= max(reTurn_list)
         
         risk = round(per_ticker.std(),5)
         risk_list.append(risk)
 
-        max_risk= max(risk_list)
 
         data_list.append({"x":reTurn, "y":risk})      
         ticker_list.append(each_ticker.ticker)
 
-
     data_dict = {
 
         "datasets": [{
-            # "label": "Hi",
+            "label": "Risk And Return",
             "showLine":False,
             "borderColor": "blue",
             "pointRadius": 7,
@@ -419,8 +359,6 @@ def create_risk_return():
     }
     
     return jsonify(data_dict)
-
-
 
 if __name__ == "__main__":
 
