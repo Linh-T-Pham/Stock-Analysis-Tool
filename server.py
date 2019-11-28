@@ -46,7 +46,7 @@ def get_chart():
     dates = []
     close_prices = []
     for t in tickers: 
-        dates.append(t.date)
+        dates.append(t.date.strftime("%a, %d %B %Y"))
         close_prices.append(t.close_p)
 
     dates.reverse()
@@ -74,7 +74,7 @@ def daily_price_variation():
     for t in tickers:
         per = round(((float(t.open_p - t.close_p)/abs(t.open_p))*100),2)
         per_daily_price_list.append(per)
-        dates.append(t.date)
+        dates.append(t.date.strftime("%a, %d %B %Y"))
       
 
     data_dict = {
