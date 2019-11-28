@@ -19,7 +19,7 @@ app.secret_key = "ABC"
 
 app.jinja_env.undefined = StrictUndefined
 
-@app.route('/about')
+@app.route('/search')
 def get_company_info():
 
     ticker = request.args.get('ticker')
