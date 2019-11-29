@@ -362,9 +362,26 @@ def create_risk_return():
 
 @app.route("/sector")
 def create_sector():
-    hi = "there"
 
-    return render_template("sector.html", hi = hi)
+    api_request = requests.get("https://www.alphavantage.co/query?function=SECTOR&apikey=pk_ab6548b1284345368ccec6e806e70415")
+    sector_p = api_request.json()
+
+    list_p = [
+    sector_p["Rank B: 1 Day Performance"]["Consumer Discretionary"],
+    sector_p["Rank B: 1 Day Performance"]["Information Technology"],
+    sector_p["Rank B: 1 Day Performance"]["Health Care"],
+    sector_p["Rank B: 1 Day Performance"]["Financials"],
+    sector_p["Rank B: 1 Day Performance"]["Real Estate"],
+    sector_p["Rank B: 1 Day Performance"]["Energy"],
+    sector_p["Rank B: 1 Day Performance"]["Materials"],
+    sector_p["Rank B: 1 Day Performance"]["Consumer Staples"],
+    sector_p["Rank B: 1 Day Performance"]["Utilities"],
+    sector_p["Rank B: 1 Day Performance"]["Industrials"]
+    ]
+
+    highest_p = max(list_p)
+
+    return render_template("sector.html", sector_p = sector_p, highest_p=highest_p)
 
 if __name__ == "__main__":
 
