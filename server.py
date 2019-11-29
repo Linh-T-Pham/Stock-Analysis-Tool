@@ -34,6 +34,7 @@ def index():
     
     return render_template("charts.html")
 
+
 @app.route('/chart.json')
 def get_chart():
    
@@ -74,8 +75,7 @@ def daily_price_variation():
     for t in tickers:
         per = round(((float(t.open_p - t.close_p)/abs(t.open_p))*100),2)
         per_daily_price_list.append(per)
-        dates.append(t.date.strftime("%a, %d %B %Y"))
-      
+        dates.append(t.date.strftime("%a, %d %B %Y"))  
 
     data_dict = {
 
@@ -359,6 +359,12 @@ def create_risk_return():
     }
     
     return jsonify(data_dict)
+
+@app.route("/sector")
+def create_sector():
+    hi = "there"
+
+    return render_template("sector.html", hi = hi)
 
 if __name__ == "__main__":
 
