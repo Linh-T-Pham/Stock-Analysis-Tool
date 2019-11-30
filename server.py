@@ -22,6 +22,8 @@ app.jinja_env.undefined = StrictUndefined
 @app.route('/search')
 def get_company_info():
 
+    """Make the search box active and help users look for company info"""
+
     ticker = request.args.get('ticker')
 
     api_request = requests.get("https://cloud.iexapis.com/stable/stock/"+ ticker + "/company/quote?token=pk_ab6548b1284345368ccec6e806e70415")
@@ -153,6 +155,7 @@ def login_process():
 
 @app.route("/logout")
 def logout():
+    """Create logout"""
     del session["user_id"]
     flash("Logged Out.")
     return redirect("/charts")
@@ -182,6 +185,7 @@ def add_to_profolio():
 
 @app.route("/user_stock")
 def add_stock():
+    """Look up user id and find all the tickers for that user id"""
 
     user = User.query.get(session['user_id'])
     tickers = user.companies
@@ -262,6 +266,8 @@ def analyze_corr():
 
     per_ticker1 = df1.pct_change()
     per_ticker2 = df2.pct_change()
+
+    """ Convert pandas series data structure to a dict"""
 
     datasets = []
 
@@ -362,6 +368,7 @@ def create_risk_return():
 
 @app.route("/sector")
 def create_sector():
+    """ Find a sector which has the highest 1 day performance"""
 
     api_request = requests.get("https://www.alphavantage.co/query?function=SECTOR&apikey=pk_ab6548b1284345368ccec6e806e70415")
     sector_p = api_request.json()
@@ -382,6 +389,18 @@ def create_sector():
     highest_p = max(list_p)
 
     return render_template("sector.html", sector_p = sector_p, highest_p=highest_p)
+
+@app.route("/ticker_lookup")
+def lookup_ticker():
+    """ Help users to find stocks which they want to add to their portfolios"""
+
+    key_word = request.args.get('name')
+
+    api_name = requests.get("https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords="+ str(key_word) +"&apikey=pk_ab6548b1284345368ccec6e806e70415")   
+    name_api = api_name.json()
+    
+    return render_template("ticker_lookup.html", name_api=name_api)
+
 
 if __name__ == "__main__":
 
