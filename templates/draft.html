@@ -1,0 +1,160 @@
+1.<br>
+Ticker: {{ name_api["bestMatches"][0]["1. symbol"] }}<br>
+Company Name: {{ name_api["bestMatches"][0]["2. name"] }}<br>
+Region: {{ name_api["bestMatches"][0]["4. region"] }}<br><br><br>
+
+2.<br>
+Ticker: {{ name_api["bestMatches"][1]["1. symbol"] }}<br>
+Company Name: {{ name_api["bestMatches"][1]["2. name"] }}<br>
+Region: {{ name_api["bestMatches"][1]["4. region"] }}<br><br><br>
+
+3.<br>
+Ticker: {{ name_api["bestMatches"][2]["1. symbol"] }}<br>
+Company Name: {{ name_api["bestMatches"][2]["2. name"] }}<br>
+Region: {{ name_api["bestMatches"][2]["4. region"] }}<br><br><br>
+
+4.<br>
+Ticker: {{ name_api["bestMatches"][3]["1. symbol"] }}<br>
+Company Name: {{ name_api["bestMatches"][3]["2. name"] }}<br>
+Region: {{ name_api["bestMatches"][3]["4. region"] }}<br><br><br>
+
+5.<br>
+Ticker: {{ name_api["bestMatches"][4]["1. symbol"] }}<br>
+Company Name: {{ name_api["bestMatches"][4]["2. name"] }}<br>
+Region: {{ name_api["bestMatches"][4]["4. region"] }}<br><br><br>
+
+6.<br>
+Ticker: {{ name_api["bestMatches"][5]["1. symbol"] }}<br>
+Company Name: {{ name_api["bestMatches"][5]["2. name"] }}<br>
+Region: {{ name_api["bestMatches"][5]["4. region"] }}<br><br><br>
+
+
+
+<div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <form class="nav-item active">
+        <a class="nav-link" href="/sector">Sector Performance<span class="sr-only">(current)</span></a>
+      </form>
+    </ul>
+
+class="sr-only">(current)</span></a>
+
+
+   <div>
+//   <h3>Risk and Return Analysis Table</h3>
+//   <table class="table">
+//     <thead>
+//       <tr>
+//         <th>Stock Ticker</th>
+//         <th>Return Rate</th>
+//         <th>Risk Rate</th>
+//         <th>Highest Return</th>
+//         <th>Highest Risk</th>
+//       </tr>
+//     </thead>
+//     <tbody>  
+//       <tr>
+//         {% for each_ticker in reTurn_list %}
+//         <td> {{ each_ticker }} </td>
+//          {% endfor %}
+//         <td></td>
+//         <td></td>
+//         <td></td>
+//         <td></td>
+//       </tr>
+//     </tbody>
+
+//   </div>
+
+
+  <form action ="/about" class="form-inline my-2 my-lg-0" method="GET"> 
+      <input class="form-control mr-sm-2" type="search" placeholder="Get Company Info" aria-label="Search" name="ticker">
+      <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Search</button>
+    </form>
+    
+
+   <ul class="nav navbar-nav navbar-right">
+    <form action="login" class="fas fa-sign-in-alt">
+      <li class ="nav-item">
+      <botton class="nav-link" href="#"><span class="fas fa-sign-in-alt"></span>Login</botton>
+    </form>
+      </li>
+    </ul>
+
+
+ <ul class="nav navbar-nav navbar-right">
+    <form action="login" class="fas fa-sign-in-alt">
+      <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Login</button>
+    </form>
+
+    </ul>
+
+
+tr>
+    <form>
+    <th>Ticker</th>
+        <th>Company</th>
+        <th>Date of Purchase</th>
+        <th>Date of Selling</th>
+        <th>Number of Shares</th>
+        <th>Total Buy Price</th>
+        <th>Total Sell Price</th>
+        <th>Gain</th>
+        <th>Loss</th>
+
+    </tr>
+    {% for company in companies %}
+    <tr>
+
+    <td> {{ company.ticker }} </td>
+
+    <td>
+    </td>
+
+    <td> 
+        <input type="text">
+    </td>
+    <td> 
+        <imput type="text">
+    </td>
+    <td>
+        <input type="text">
+    </td>
+    
+    <td>
+        <input type="text">  
+    </td>
+
+    <td>
+        <input type="text">
+    </td>
+    <td>
+        <input type="text">
+    </td>
+    <td></td>
+   
+        
+    </tr>
+    {% endfor %}
+    </form>
+
+    <!DOCTYPE html>
+<html>
+<head>
+  <title>{% block title %}TITLE GOES HERE{% endblock %}</title>
+  <!-- Style -->
+  <link href="/static/style.css" rel="stylesheet"></link>
+  <link href="http://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
+  <!-- Javascript Imports -->
+  <script src="https://code.jquery.com/jquery.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.1/Chart.js"></script>
+</head>
+<body>
+  {% block content %}
+
+<!--   BODY CONTENT GOES HERE -->
+
+  {% endblock %}
+  <footer></footer>
+</body>
+</html>

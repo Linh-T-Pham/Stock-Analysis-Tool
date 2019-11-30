@@ -1,0 +1,253 @@
+
+{% extends 'base.html' %}
+{% block content %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title> My dashboard</title>
+    <img src="https://66.media.tumblr.com/78e69033fd1524fbb887ded6c76dbcd6/tumblr_n0gpmxCF6X1rfjowdo1_500.gif" alt="this slowpoke moves" width=100/> 
+</head>
+<body>
+<h3>Current Market Data</h3>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col" >Company Name</th>
+      <th scope="col">Ticker Name</th>
+      <th scope="col">Current Price</th>
+      <th scope="col">Previous Close</th>
+      <th scope="col">Market Cap</th>
+      <th scope="col">YTD Change</th>
+      <th scope="col">52wk High</th>
+      <th scope="col">52wk Low</th>
+      <th scope="col">PE Ratio</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for each_ticker in ticker_data %}     
+    <tr>
+      <td>{{ each_ticker.companyName }}</td>
+      <td>{{ each_ticker.symbol }}</td>
+      <td>${{ each_ticker.latestPrice }}</td>
+      <td>${{ each_ticker.previousClose }}</td>
+      <td>{{ each_ticker.marketCap }}</td>
+      <td>%{{ each_ticker.ytdChange }}</td>
+      <td>${{ each_ticker.week52High }}</td>
+      <td>${{ each_ticker.week52Low }}</td>
+      <td>{{ each_ticker.peRatio }}</td>
+
+    </tr>
+     {% endfor %}
+  </tbody>
+</table><br>
+      
+<!-- CREATE SCARTTER PLOT FOR COLLRELATION ANALYSIS  -->
+
+<form id="corr_form">
+    <h3>Correlation Analysis</h3>
+    <label>Enter First Ticker:
+    <input type="text" name="ticker1">
+    <lable>Enter Second Ticker:
+    <input type="text" name="ticker2">
+    <input type="submit" value="View Chart" id="ticker-submit">  
+</form>
+
+<div class="Correlation">
+    <canvas id="ScatterPlot"></canvas>
+    <div id="ScatterLegend" class="scatter-legend"></div>
+</div>
+
+<script>
+    const options = {
+        legend: {display: true},
+        scales: {
+            xAxes: [{
+                type: 'time',
+                time: {
+                  displayFormats:{
+                    quarter: 'MMM YYYY'
+                  }
+                }
+            }]
+        }
+    
+    };
+
+    let formatDateStringForChart = (s) => {
+    let d = new Date(s);
+    return d.toDateString();
+};
+
+    const ctx_scatter = $("#ScatterPlot").get(0).getContext("2d");
+    
+    $("#corr_form").on("submit", (evt) => {
+      evt.preventDefault();
+
+
+      // Get all user's input from the form 
+      const formInputs = $("#corr_form").serialize();
+ 
+
+      // Sending formInputs to the server. data1 is in json format 
+    $.get("/correlation.json", formInputs, (data1) => {
+      
+        const myScatterPlot = Chart.Scatter(ctx_scatter, {
+                                    type: 'scatter',
+                                    data: data1,
+                                    options: options
+
+                                });
+
+    $("#ScatterLegend").html(myScatterPlot);
+
+    });
+
+});
+
+</script><br>
+  
+<!-- CREATE CHART FOR RISK AND RETURN ANALYSIS  --> 
+
+<form id="r-form">
+  <h3>Risk and Return Analysis</h3>
+  <input type="submit" value="View Chart" id="risk-analysis-submit"> 
+</form><br>
+
+<div class="Risk and Return">
+    <canvas id="lineC"></canvas>
+    <div id="rLegend" class="r-legend"></div>
+</div><br><br>
+
+{{ max1 }} HAS THE HIGHEST RISK &nbsp;&nbsp;&nbsp;
+
+<span class="blink">SELL {{ max1 }}</span>
+
+<script>
+
+  function blink_text() {
+    $('.blink').fadeOut(500);
+    $('.blink').fadeIn(500);
+}
+setInterval(blink_text, 1000);
+
+</script><br>
+
+<div>
+  <table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Ticker Name</th>
+      <th scope="col">Risk Rate</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for key in new_dict1 %}  
+    <tr>
+    <td>{{ key }}</td>
+    <td>{{ new_dict1[key] }}</td> 
+    </tr>
+    {% endfor %}
+
+  </tbody>
+</table><br><br>
+      
+</div>
+
+{{ max2 }} HAS THE HIGHEST RETURN &nbsp;&nbsp;&nbsp;
+
+<span class="blink">BUY {{ max2 }}</span>
+
+<script>
+
+  function blink_text() {
+    $('.blink').fadeOut(500);
+    $('.blink').fadeIn(500);
+}
+setInterval(blink_text, 1000);
+
+</script>
+
+
+<div>
+  <table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Ticker Name</th>
+      <th scope="col">Return Rate</th>
+     
+    </tr>
+  </thead>
+  <tbody>
+    {% for key in new_dict2 %}  
+    <tr>
+    <td>{{ key }}</td>
+    <td>{{ new_dict2[key] }}</td> 
+    </tr>
+    {% endfor %}
+
+  </tbody>
+</table>
+      
+</div><br><br>
+
+<script>
+  
+    // Make donut chart for risk comparison 
+    const ctx_d = $("#lineC").get(0).getContext("2d");
+
+
+    $("#risk-analysis-submit").on("click", (evt) => {
+      evt.preventDefault();
+
+    const formInputs = $("r-form").serialize();
+
+      // Get all user's input from the form 
+    $.get("/risk_return_analysis.json", (data) =>{
+      
+      const myscatterchart = new Chart(ctx_d, { 
+                                      type:'scatter',
+                                      data: data,
+                                      options: {
+                                      responsive: true,
+                                      legend: {display: false},
+                                      scales:{
+                                        yAxes: [{
+                                          display:true,
+                                          scaleLabel: {
+                                            display: true,
+                                            labelString: 'RISK'
+                                          },
+                                          ticks:{
+                                            beginAtZero: true,
+                                            frontColor: "black"
+                                          }
+                                        }],
+                                        xAxes: [{
+                                          display:true,
+                                          scaleLabel: {
+                                            display: true,
+                                            labelString: 'RETURN'
+                                          },
+                                          ticks:{
+                                            frontColor: "black"
+                                          }
+                                        }]
+                                      }
+                                      }
+                                     
+                                    });
+
+    $("#rLegend").html(myscatterchart);
+  
+    });
+
+  });
+
+
+</script><br><br><br>
+
+{% endblock %}
+
+</body>
+</html>

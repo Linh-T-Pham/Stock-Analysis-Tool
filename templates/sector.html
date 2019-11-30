@@ -1,0 +1,69 @@
+
+{% extends 'base.html' %} {% block content %}
+ 
+<br>
+
+<span class="blink">
+
+{% for key, value in sector_p["Rank B: 1 Day Performance"].items() %}
+        {% if  highest_p  == value %}
+           {{ key }}
+           has the highest 1 day peformance
+        {% endif %}
+
+    {% endfor %}<br>
+
+</span>
+
+<script>
+
+  function blink_text() {
+    $('.blink').fadeOut(400);
+    $('.blink').fadeIn(400);
+}
+setInterval(blink_text, 1000);
+
+</script><br>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sector Performance</title>
+
+   Information: {{ sector_p["Meta Data"]["Information"]}}<br>
+   Last Refreshed: {{ sector_p["Meta Data"]["Last Refreshed"]}}<br><br>
+   
+
+   Consumer Discretionary: {{ sector_p["Rank B: 1 Day Performance"]["Consumer Discretionary"]}}
+   <br>
+
+   Communication Services: {{ sector_p["Rank B: 1 Day Performance"]["Communication Services"]}}<br>
+   
+   Information Technology: {{ sector_p["Rank B: 1 Day Performance"]["Information Technology"]}}<br>
+
+
+   Health Care: {{ sector_p["Rank B: 1 Day Performance"]["Health Care"]}}<br>
+   Financials: {{ sector_p["Rank B: 1 Day Performance"]["Financials"]}}<br>
+
+   Real Estate: {{ sector_p["Rank B: 1 Day Performance"]["Real Estate"]}}<br>
+
+   Energy : {{ sector_p["Rank B: 1 Day Performance"]["Energy"]}}<br>
+   
+   Materials : {{ sector_p["Rank B: 1 Day Performance"]["Materials"]}}<br>
+
+   Consumer Staples : {{ sector_p["Rank B: 1 Day Performance"]["Consumer Staples"]}}<br>
+
+   Utilities : {{ sector_p["Rank B: 1 Day Performance"]["Utilities"]}}<br>
+   Industrials: {{ sector_p["Rank B: 1 Day Performance"]["Industrials"]}}<br>
+
+   
+    
+</head>
+<body>
+
+</body>
+</html>
+
+
+{% endblock %}
