@@ -29,11 +29,16 @@ def get_company_info():
     api_request = requests.get("https://cloud.iexapis.com/stable/stock/"+ ticker + "/company/quote?token=pk_ab6548b1284345368ccec6e806e70415")
     ticker_api = api_request.json()
 
-    return render_template("homepage.html", ticker=ticker, ticker_api = ticker_api)
+    return render_template("comp_info.html", ticker=ticker, ticker_api = ticker_api)
 
 @app.route('/')
 def index():
     
+    return render_template("homepage.html")
+
+@app.route('/add_stock')
+def add_stock_to_port():
+
     return render_template("charts.html")
 
 
@@ -150,7 +155,7 @@ def login_process():
     session["user_id"] = user.user_id
 
     flash("Logged in")
-    return redirect("/")
+    return redirect("/add_stock")
 
 
 @app.route("/logout")
