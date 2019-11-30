@@ -1,23 +1,21 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %}
+
+{% block title %} {% endblock %}
+
+{% block content %}
 
 
-<h1> {{ ticker_api.symbol }}</h1>
-Company Name: {{ ticker_api.companyName }}<br>
-Exchange: {{ ticker_api.exchange}}<br>
-Industry: {{ ticker_api.industry}}<br>
-Website: {{ ticker_api.website}}<br><br>
-Dersription: {{ ticker_api.description}}<br><br>
-CEO: {{ ticker_api.CEO}}<br>
-Sector: {{ ticker_api.sector}}<br>
-Number of Employees: {{ ticker_api.employees}}<br>
-Address: {{ ticker_api.address}}
-{{ ticker_api.address2 }}
-{{ ticker_api.state }}
-{{ ticker_api.city }}
-{{ ticker_api.country }}<br>
-Phone: {{ ticker_api.phone }}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Homepage</title>
+</head>
+<body>
+
+    <h1>Hello</h1>
+
+</body>
+</html>
+
 
 {% endblock %}
-
-
-
