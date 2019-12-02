@@ -23,7 +23,7 @@
   <title>Hello, world!</title> -->
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand" href="/">Stock Analysis</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -49,22 +49,26 @@
         <a class="nav-link" href="/add_stock">Add Stock<span class="sr-only">(current)</span></a>
       </form>
     </ul>
-    
-  <form action ="/search" class="form-inline my-2 my-lg-0" method="GET"> 
-      <input class="form-control mr-sm-2" type="search" placeholder="Get Company Info" aria-label="Search" name="ticker">
-      <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Search</button>
-  </form>
   
-    
+  <form action="/search" class="navbar-form navbar-right">
+  <div class="input-group">
+      <input type="Search" class="form-control" placeholder="Get Company Info" name="ticker">
+      <div class="input-group-btn">
+          <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+      </div>
+  </form>
+
   <ul class="nav navbar-nav navbar-right"> 
     <form action="/login" class="fas fa-sign-in-alt">
       <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Login</button>
     </form>
   </ul>
 
-
   </div>
 </nav>
+
+
+
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

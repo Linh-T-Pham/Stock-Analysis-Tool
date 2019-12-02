@@ -1,3 +1,12 @@
+
+
+
+  
+  <form action ="/search" class="form-inline my-2 my-lg-0" method="GET"> 
+      <input class="form-control mr-sm-2" type="search" placeholder="Get Company Info" aria-label="Search" name="ticker">
+      <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Search</button>
+  </form>
+
 1.<br>
 Ticker: {{ name_api["bestMatches"][0]["1. symbol"] }}<br>
 Company Name: {{ name_api["bestMatches"][0]["2. name"] }}<br>

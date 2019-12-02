@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %} {% endblock %}
+
+{% block content %}
+
+<br><br>
+
+<!DOCTYPE html>
+<html>
+<head>
+
+<h1>Ticker Lookup</h1>
+
+<form action="/ticker_lookup">
+  <input type="text" name="name" placeholder="Search a ticker">
+  <input type="submit" value="Search"><br><br>
+</form>
+<body>
+
+1.<br>
+Ticker: {{ name_api["bestMatches"][0]["1. symbol"] }}<br>
+Company Name: {{ name_api["bestMatches"][0]["2. name"] }}<br>
+Region: {{ name_api["bestMatches"][0]["4. region"] }}<br><br><br>
+
+2.<br>
+Ticker: {{ name_api["bestMatches"][1]["1. symbol"] }}<br>
+Company Name: {{ name_api["bestMatches"][1]["2. name"] }}<br>
+Region: {{ name_api["bestMatches"][1]["4. region"] }}<br><br><br>
+
+3.<br>
+Ticker: {{ name_api["bestMatches"][2]["1. symbol"] }}<br>
+Company Name: {{ name_api["bestMatches"][2]["2. name"] }}<br>
+Region: {{ name_api["bestMatches"][2]["4. region"] }}<br><br><br>
+
+4.<br>
+Ticker: {{ name_api["bestMatches"][3]["1. symbol"] }}<br>
+Company Name: {{ name_api["bestMatches"][3]["2. name"] }}<br>
+Region: {{ name_api["bestMatches"][3]["4. region"] }}<br><br><br>
+
+5.<br>
+Ticker: {{ name_api["bestMatches"][4]["1. symbol"] }}<br>
+Company Name: {{ name_api["bestMatches"][4]["2. name"] }}<br>
+Region: {{ name_api["bestMatches"][4]["4. region"] }}<br><br><br>
+
+6.<br>
+Ticker: {{ name_api["bestMatches"][5]["1. symbol"] }}<br>
+Company Name: {{ name_api["bestMatches"][5]["2. name"] }}<br>
+Region: {{ name_api["bestMatches"][5]["4. region"] }}<br><br><br>
+
+</body>
+</html>
+
+{% endblock %}
+
+
+<!-- <input type="ticker" name="ticker" required class="form-control">
