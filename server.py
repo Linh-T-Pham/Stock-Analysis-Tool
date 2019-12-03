@@ -266,6 +266,7 @@ def analyze_corr():
                 "borderColor": "blue",
                 "showLine":False,
                 "pointRadius": 7,
+                "pointBackgroundColor": "blue",
                 "data": []}
    
     for d1, per1 in ticker1_dict.items():
@@ -281,6 +282,7 @@ def analyze_corr():
                 "borderColor": "green",
                 "showLine":False,
                 "pointRadius": 7,
+                 "pointBackgroundColor": "green",
                 "data": []
                 }
     
