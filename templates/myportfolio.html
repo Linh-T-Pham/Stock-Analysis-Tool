@@ -11,7 +11,8 @@
 <body>
 <h3>Current Market Data</h3>
 <table class="table table-striped">
-  <thead>
+    <thead class="thead-dark">
+
     <tr>
       <th scope="col" >Company Name</th>
       <th scope="col">Ticker Name</th>
@@ -68,7 +69,15 @@
                   displayFormats:{
                     quarter: 'MMM YYYY'
                   }
+                },
+                ticks:{
+                  fontColor: "black"
                 }
+            }],
+            yAxes: [{
+              ticks:{
+                fontColor: "black"
+              }
             }]
         }
     
@@ -136,14 +145,14 @@ setInterval(blink_text, 1000);
 <div>
   <table class="table table-striped">
   <thead>
-    <tr>
+    <tr class="bg-danger">
       <th scope="col">Ticker Name</th>
       <th scope="col">Risk Rate</th>
     </tr>
   </thead>
   <tbody>
     {% for key in new_dict1 %}  
-    <tr>
+    <tr class="table-danger">
     <td>{{ key }}</td>
     <td>{{ new_dict1[key] }}</td> 
     </tr>
@@ -172,7 +181,7 @@ setInterval(blink_text, 1000);
 <div>
   <table class="table table-striped">
   <thead>
-    <tr>
+    <tr class="bg-success">
       <th scope="col">Ticker Name</th>
       <th scope="col">Return Rate</th>
      
@@ -180,7 +189,7 @@ setInterval(blink_text, 1000);
   </thead>
   <tbody>
     {% for key in new_dict2 %}  
-    <tr>
+    <tr class="table-success">
     <td>{{ key }}</td>
     <td>{{ new_dict2[key] }}</td> 
     </tr>
@@ -216,21 +225,27 @@ setInterval(blink_text, 1000);
                                           display:true,
                                           scaleLabel: {
                                             display: true,
+                                            fontColor: "red",
+                                            fontStyle: "bold",
+                                            fontSize: 15,
                                             labelString: 'RISK'
                                           },
                                           ticks:{
                                             beginAtZero: true,
-                                            frontColor: "black"
+                                            fontColor: "black"
                                           }
                                         }],
                                         xAxes: [{
                                           display:true,
                                           scaleLabel: {
                                             display: true,
+                                            fontColor: "green",
+                                            fontStyle: "bold",
+                                            fontSize: 15,
                                             labelString: 'RETURN'
                                           },
                                           ticks:{
-                                            frontColor: "black"
+                                            fontColor: "black"
                                           }
                                         }]
                                       }
