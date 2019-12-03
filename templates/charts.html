@@ -4,12 +4,20 @@
 
 {% block content %}
 
+<br>
 <!DOCTYPE html>
 <html>
 <body>
+<style>
+  body{
+    background-color: #4a4a4a;
+  }
+</style>
+
+
 <form action="/add_portfolio" method="POST">
   <div class="topnav">
-      <label>Enter a ticker:
+      <label><font color="white">ENTER A TICKER</font>
         <input type="ticker" name="ticker" required class="form-control">
         <input type="submit" value="Add To Porfolio" id="my-profolio"> 
   </div>
@@ -49,7 +57,8 @@ with old ticker and company name to new ones. Then on the terminal, run seed_dat
     <option value="NKE">Nike</option>
    
   </select>
-  <input type="submit" value="View Chart" id="ticker-submit"><br><br>
+  <input type="submit" value="View Chart" id="ticker-submit"><br><br><br>
+  
 </form>
 
   <div class="Company">
@@ -113,6 +122,7 @@ with old ticker and company name to new ones. Then on the terminal, run seed_dat
             title:{
                     display:true,
                     text: "DAILY PRICE IN 2019",
+                    fontColor: "#FFA500",
                     fontSize: 18},
 
             tooltips: {
@@ -214,6 +224,7 @@ with old ticker and company name to new ones. Then on the terminal, run seed_dat
                   title:{
                     display:true,
                     text: "DAILY PRICE VARIATION IN 2019",
+                    fontColor: "#90EE90",
                     fontSize: 18
 
                   },
