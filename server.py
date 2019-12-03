@@ -21,7 +21,6 @@ app.jinja_env.undefined = StrictUndefined
 
 @app.route('/search')
 def get_company_info():
-
     """Make the search box active and help users look for company info"""
 
     ticker = request.args.get('ticker')
@@ -41,16 +40,13 @@ def add_stock_to_port():
 
     return render_template("charts.html")
 
-
 @app.route('/chart.json')
 def get_chart():
    
     ticker = request.args.get('comp')
  
-
     tickers = DailyPrice.query.filter_by(ticker=ticker).all()
   
-
     dates = []
     close_prices = []
     for t in tickers: 
@@ -67,7 +63,6 @@ def get_chart():
   
     return jsonify(data_dict)
 
- 
 @app.route('/variation.json')
 def daily_price_variation():
 
@@ -103,13 +98,11 @@ def daily_price_variation():
 
     return jsonify(data_dict)
 
-
 @app.route("/login", methods=["GET"])
 def login_form():
     """login form."""
 
     return render_template("login_form.html")
-
 
 @app.route("/register", methods=["GET"])
 def register_form():
@@ -117,11 +110,9 @@ def register_form():
 
     return render_template("register.html")
 
-
 @app.route("/register", methods=["POST"])
 def register_create():
     """Users need to login"""
-
     email = request.form["email"]
     fname = request.form["firstname"]
     lname = request.form["lastname"]
@@ -133,7 +124,6 @@ def register_create():
     db.session.commit()
 
     return redirect("/login")
-
 
 @app.route("/login", methods=["POST"])
 def login_process():
@@ -157,14 +147,12 @@ def login_process():
     flash("Logged in")
     return redirect("/add_stock")
 
-
 @app.route("/logout")
 def logout():
     """Create logout"""
     del session["user_id"]
     flash("Logged Out.")
     return redirect("/charts")
-
 
 @app.route("/add_portfolio", methods=['POST'])
 def add_to_profolio():
@@ -178,7 +166,6 @@ def add_to_profolio():
         return redirect("/login")
 
     new_ticker = User_Company(ticker=ticker, user_id=user_id)
-
 
     db.session.add(new_ticker)
     db.session.commit()
@@ -210,11 +197,9 @@ def add_stock():
     risk_list =[]
     ticker_list = []
 
-
     for each_ticker in tickers:
         df = pan.DataReader(each_ticker.ticker, 'av-daily', start, end, 
         api_key="pk_ab6548b1284345368ccec6e806e70415")['close']
-
 
         per_ticker = df.pct_change()
         
@@ -248,7 +233,6 @@ def add_stock():
 def go_to_portfolio():
 
     return redirect("/user_stock")
-
 
 @app.route("/correlation.json")
 def analyze_corr():
@@ -315,14 +299,12 @@ def analyze_corr():
 
     # print(data)
 
-
     data_dict = {
         "datasets": datasets
     }
     print(data_dict)
     
     return jsonify(data_dict)
-
 
 @app.route("/risk_return_analysis.json")
 def create_risk_return():
@@ -405,6 +387,8 @@ def lookup_ticker():
     name_api = api_name.json()
     
     return render_template("ticker_lookup.html", name_api=name_api)
+
+
 
 
 if __name__ == "__main__":
