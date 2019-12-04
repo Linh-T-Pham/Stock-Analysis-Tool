@@ -17,37 +17,22 @@
   <input type="submit" value="Search"><br><br>
 </form>
 <body>
+   
+{% for comp in name_api['bestMatches'] %}
+ <div class="container">
+      <div class ="row">
+        <div class="col">
+  
+       
 
-1.<br>
-Ticker: {{ name_api["bestMatches"][0]["1. symbol"] }}<br>
-Company Name: {{ name_api["bestMatches"][0]["2. name"] }}<br>
-Region: {{ name_api["bestMatches"][0]["4. region"] }}<br><br><br>
-
-2.<br>
-Ticker: {{ name_api["bestMatches"][1]["1. symbol"] }}<br>
-Company Name: {{ name_api["bestMatches"][1]["2. name"] }}<br>
-Region: {{ name_api["bestMatches"][1]["4. region"] }}<br><br><br>
-
-3.<br>
-Ticker: {{ name_api["bestMatches"][2]["1. symbol"] }}<br>
-Company Name: {{ name_api["bestMatches"][2]["2. name"] }}<br>
-Region: {{ name_api["bestMatches"][2]["4. region"] }}<br><br><br>
-
-4.<br>
-Ticker: {{ name_api["bestMatches"][3]["1. symbol"] }}<br>
-Company Name: {{ name_api["bestMatches"][3]["2. name"] }}<br>
-Region: {{ name_api["bestMatches"][3]["4. region"] }}<br><br><br>
-
-5.<br>
-Ticker: {{ name_api["bestMatches"][4]["1. symbol"] }}<br>
-Company Name: {{ name_api["bestMatches"][4]["2. name"] }}<br>
-Region: {{ name_api["bestMatches"][4]["4. region"] }}<br><br><br>
-
-6.<br>
-Ticker: {{ name_api["bestMatches"][5]["1. symbol"] }}<br>
-Company Name: {{ name_api["bestMatches"][5]["2. name"] }}<br>
-Region: {{ name_api["bestMatches"][5]["4. region"] }}<br><br><br>
-
+<br>
+Ticker: {{ comp["1. symbol"] }}<br>
+Company Name: {{ comp["2. name"] }}<br>
+Region: {{ comp["4. region"] }}<br><br><br>
+</div>
+</div>
+</div>
+{% endfor %}
 </body>
 </html>
 
