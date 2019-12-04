@@ -77,9 +77,16 @@ class DailyPrice(db.Model):
 ##############################################################################
 # Helper functions
 
+def init_app():
+    from flask import Flask
+    app = Flask(__name__)
+
+    connect_to_db(app, "postgresql:///testdb")
+    print("Connected to DB.")
+
 def example_data():
     """Populate a database with sample data for testing purposes."""
-    db.create.all()
+    db.create_all()
 
     User.query.delete()
     User_Company.query.delete()
@@ -87,10 +94,11 @@ def example_data():
 
     #sample users
 
-    user1 = User(user_id=1, fname=Nikki, lname=test, email='12@test.com', password="password")
-    user2 = User(user_id=2, fname=Linh, lname=test, email='34@test.com', password="password")
-    user3 = User(user_id=3, fname=Pauline, lname=test, email='56@test.com', password="password")
-
+    user1 = User(user_id=1, fname="Nikki", lname="test", email='12@test.com', password="password")
+    user2 = User(user_id=2, fname="Nina", lname="test", email='34@test.com', password="password")
+    user3 = User(user_id=3, fname="Pauline", lname="test", email='56@test.com', password="password")
+    db.session.add_all([user1, user2, user3])
+    db.session.commit()
     #sample companies
 
     company1 = Company(ticker="FIT", name="Fitbit")
