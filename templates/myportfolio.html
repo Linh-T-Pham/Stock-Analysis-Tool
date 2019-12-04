@@ -1,12 +1,11 @@
 
 {% extends 'base.html' %}
 {% block content %}
-
+<br>
 <!DOCTYPE html>
 <html>
 <head>
     <title> My dashboard</title>
-    <img src="https://66.media.tumblr.com/78e69033fd1524fbb887ded6c76dbcd6/tumblr_n0gpmxCF6X1rfjowdo1_500.gif" alt="this slowpoke moves" width=100/> 
 </head>
 <body>
 <h3>Current Market Data</h3>
@@ -128,15 +127,15 @@
     <div id="rLegend" class="r-legend"></div>
 </div><br><br>
 
-{{ max1 }} HAS THE HIGHEST RISK &nbsp;&nbsp;&nbsp;
+<b>{{ max1 }} HAS THE HIGHEST RISK</b> &nbsp;&nbsp;&nbsp;
 
-<span class="blink">SELL {{ max1 }}</span>
+<span class="blink1">SELL {{ max1 }}</span>
 
 <script>
 
   function blink_text() {
-    $('.blink').fadeOut(500);
-    $('.blink').fadeIn(500);
+    $('.blink1').fadeOut(500);
+    $('.blink1').fadeIn(500);
 }
 setInterval(blink_text, 1000);
 
@@ -163,15 +162,15 @@ setInterval(blink_text, 1000);
       
 </div>
 
-{{ max2 }} HAS THE HIGHEST RETURN &nbsp;&nbsp;&nbsp;
+<b>{{ max2 }} HAS THE HIGHEST RETURN</b> &nbsp;&nbsp;&nbsp;
 
-<span class="blink">BUY {{ max2 }}</span>
+<span class="blink2">BUY {{ max2 }}</span>
 
 <script>
 
   function blink_text() {
-    $('.blink').fadeOut(500);
-    $('.blink').fadeIn(500);
+    $('.blink2').fadeOut(500);
+    $('.blink2').fadeIn(500);
 }
 setInterval(blink_text, 1000);
 
