@@ -77,6 +77,35 @@ class DailyPrice(db.Model):
 ##############################################################################
 # Helper functions
 
+def example_data():
+    """Populate a database with sample data for testing purposes."""
+    db.create.all()
+
+    User.query.delete()
+    User_Company.query.delete()
+    Company.query.delete()
+
+    #sample users
+
+    user1 = User(user_id=1, fname=Nikki, lname=test, email='12@test.com', password="password")
+    user2 = User(user_id=2, fname=Linh, lname=test, email='34@test.com', password="password")
+    user3 = User(user_id=3, fname=Pauline, lname=test, email='56@test.com', password="password")
+
+    #sample companies
+
+    company1 = Company(ticker="FIT", name="Fitbit")
+    company2 = Company(ticker="PINS",name="Pinterest")
+
+    # sample user_companies
+
+    user_company1 = User_Company(user_comp_id=1, user_id=1, ticker="FIT")
+    user_company2 = User_Company(user_comp_id=2, user_id=2, ticker="PINS")
+
+    # Add all to sesson and commit
+
+    db.session.add_all([user1, user2 ,user3, company1, company2, user_company1, user_company2])
+    db.session.commit()
+
 def connect_to_db(app, db_uri="postgresql:///stocks"):
     """Connect the database to our Flask app."""
 
@@ -95,3 +124,15 @@ if __name__ == "__main__":
 
     connect_to_db(app)
     print("Connected to DB.")
+
+
+
+
+
+
+
+
+
+
+
+    
