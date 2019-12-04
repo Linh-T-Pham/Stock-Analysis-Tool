@@ -4,34 +4,44 @@
 
 {% block content %}
 
-<br><br>
+<br>
 
 <!DOCTYPE html>
 <html>
 <head>
 
+<font
+color="white">
 <h1>Ticker Lookup</h1>
+
+</font>
 
 <form action="/ticker_lookup">
   <input type="text" name="name" placeholder="Search a ticker">
   <input type="submit" value="Search"><br><br>
 </form>
 <body>
-   
-{% for comp in name_api['bestMatches'] %}
- <div class="container">
-      <div class ="row">
-        <div class="col">
-  
-       
 
-<br>
-Ticker: {{ comp["1. symbol"] }}<br>
+<style>
+  body{
+    background-color: #4a4a4a;
+  }
+</style>
+
+
+{% for comp in name_api['bestMatches'] %}
+
+<ul>  
+<font
+color="white">     
+<li>Ticker: {{ comp["1. symbol"] }}</li>
 Company Name: {{ comp["2. name"] }}<br>
-Region: {{ comp["4. region"] }}<br><br><br>
-</div>
-</div>
-</div>
+Region: {{ comp["4. region"] }}<br>
+</font>
+</ul>
+
+
+
 {% endfor %}
 </body>
 </html>

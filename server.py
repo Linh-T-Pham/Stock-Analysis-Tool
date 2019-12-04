@@ -391,8 +391,6 @@ def lookup_ticker():
     return render_template("ticker_lookup.html", name_api=name_api)
 
 
-
-
 if __name__ == "__main__":
 
     # Do not debug for demo

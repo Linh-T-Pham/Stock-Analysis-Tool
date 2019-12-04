@@ -2,7 +2,8 @@
 {% extends 'base.html' %} {% block content %}
  
 <br>
-
+<font
+color="white">
 <span class="blink">
 
 {% for key, value in sector_p["Rank B: 1 Day Performance"].items() %}
@@ -14,6 +15,7 @@
     {% endfor %}<br>
 
 </span>
+
 
 <script>
 
@@ -57,10 +59,15 @@ setInterval(blink_text, 1000);
    Utilities : {{ sector_p["Rank B: 1 Day Performance"]["Utilities"]}}<br>
    Industrials: {{ sector_p["Rank B: 1 Day Performance"]["Industrials"]}}<br>
 
-   
+ </font>  
     
 </head>
 <body>
+<style>
+  body{
+    background-color: #4a4a4a;
+  }
+</style>
 
 </body>
 </html>

@@ -1,6 +1,14 @@
 {% extends 'base.html' %} {% block content %}
+<body>
 
+<style>
+  body{
+    background-color: #4a4a4a;
+  }
+</style>
 
+<font
+color="white">
 <h1> {{ ticker_api.symbol }}</h1>
 Company Name: {{ ticker_api.companyName }}<br>
 Exchange: {{ ticker_api.exchange}}<br>
@@ -16,6 +24,8 @@ Address: {{ ticker_api.address}}
 {{ ticker_api.city }}
 {{ ticker_api.country }}<br>
 Phone: {{ ticker_api.phone }}
+</font>
+</body>
 
 {% endblock %}
 
