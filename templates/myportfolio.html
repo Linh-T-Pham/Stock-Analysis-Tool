@@ -8,57 +8,143 @@
     <title> My dashboard</title>
 </head>
 <body>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <h3>Current Market Data</h3>
+        <table class="table table-striped">
+            <thead class="thead-dark">
 
-<h3>Current Market Data</h3>
-<table class="table table-striped">
-    <thead class="thead-dark">
+            <tr>
+              <th scope="col" >Company Name</th>
+              <th scope="col">Ticker Name</th>
+              <th scope="col">Current Price</th>
+              <th scope="col">Previous Close</th>
+              <th scope="col">Market Cap</th>
+              <th scope="col">YTD Change</th>
+              <th scope="col">52wk High</th>
+              <th scope="col">52wk Low</th>
+              <th scope="col">PE Ratio</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for each_ticker in ticker_data %}     
+            <tr>
+              <td>{{ each_ticker.companyName }}</td>
+              <td>{{ each_ticker.symbol }}</td>
+              <td>${{ each_ticker.latestPrice }}</td>
+              <td>${{ each_ticker.previousClose }}</td>
+              <td>{{ each_ticker.marketCap }}</td>
+              <td>%{{ each_ticker.ytdChange }}</td>
+              <td>${{ each_ticker.week52High }}</td>
+              <td>${{ each_ticker.week52Low }}</td>
+              <td>{{ each_ticker.peRatio }}</td>
 
-    <tr>
-      <th scope="col" >Company Name</th>
-      <th scope="col">Ticker Name</th>
-      <th scope="col">Current Price</th>
-      <th scope="col">Previous Close</th>
-      <th scope="col">Market Cap</th>
-      <th scope="col">YTD Change</th>
-      <th scope="col">52wk High</th>
-      <th scope="col">52wk Low</th>
-      <th scope="col">PE Ratio</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for each_ticker in ticker_data %}     
-    <tr>
-      <td>{{ each_ticker.companyName }}</td>
-      <td>{{ each_ticker.symbol }}</td>
-      <td>${{ each_ticker.latestPrice }}</td>
-      <td>${{ each_ticker.previousClose }}</td>
-      <td>{{ each_ticker.marketCap }}</td>
-      <td>%{{ each_ticker.ytdChange }}</td>
-      <td>${{ each_ticker.week52High }}</td>
-      <td>${{ each_ticker.week52Low }}</td>
-      <td>{{ each_ticker.peRatio }}</td>
+            </tr>
+             {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-    </tr>
-     {% endfor %}
-  </tbody>
-</table><br>
-      
-<!-- CREATE SCARTTER PLOT FOR COLLRELATION ANALYSIS  -->
+    <div class="row">
+      <div class="col">
+        <!-- CREATE SCARTTER PLOT FOR COLLRELATION ANALYSIS  -->
+        <form id="corr_form">
+            <h3>Correlation Analysis</h3>
+            <label for="ticker1">Enter First Ticker:</label>
+            <input id="ticker1" type="text" name="ticker1">
+            <lable for="ticker2">Enter Second Ticker:</lable>
+            <input id="ticker2" type="text" name="ticker2">
+            <input type="submit" value="View Chart" id="ticker-submit">  
+        </form>
 
-<form id="corr_form">
-    <h3>Correlation Analysis</h3>
-    <label>Enter First Ticker:
-    <input type="text" name="ticker1">
-    <lable>Enter Second Ticker:
-    <input type="text" name="ticker2">
-    <input type="submit" value="View Chart" id="ticker-submit">  
-</form>
+        <div class="Correlation">
+          <canvas id="ScatterPlot"></canvas>
+          <div id="ScatterLegend" class="scatter-legend"></div>
+        </div>
+      </div>
+    </div>
 
-<div class="Correlation">
-    <canvas id="ScatterPlot"></canvas>
-    <div id="ScatterLegend" class="scatter-legend"></div>
-</div>
+    <div class="row">
+      <div class="col">
+        <!-- CREATE CHART FOR RISK AND RETURN ANALYSIS  --> 
 
+        <form id="r-form">
+          <h3>Risk and Return Analysis</h3>
+          <input type="submit" value="View Chart" id="risk-analysis-submit"> 
+        </form>
+
+        <div class="Risk and Return">
+          <canvas id="lineC"></canvas>
+          <div id="rLegend" class="r-legend"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <!-- CREATE HIGHEST RISK AND RETURN TABLE  -->
+        <div class="table-title">
+          <b class="mr-3">{{ max1 }} HAS THE HIGHEST RISK</b>
+          <span class="blink-text blink1">SELL {{ max1 }}</span>
+        </div>
+
+        <table class="table table-striped">
+          <thead>
+            <tr class="bg-danger">
+              <th scope="col">Ticker Name</th>
+              <th scope="col">Risk Rate</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for key in new_dict1 %}  
+            <tr class="table-danger">
+            <td>{{ key }}</td>
+            <td>{{ new_dict1[key] }}</td> 
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col">
+        <div class="table-title">
+          <b class="mr-3">{{ max2 }} HAS THE HIGHEST RETURN</b>
+          <span class="blink-text blink2">BUY {{ max2 }}</span>
+        </div>
+
+        <table class="table table-striped">
+          <thead>
+            <tr class="bg-success">
+              <th scope="col">Ticker Name</th>
+              <th scope="col">Return Rate</th>
+             
+            </tr>
+          </thead>
+          <tbody>
+            {% for key in new_dict2 %}  
+            <tr class="table-success">
+            <td>{{ key }}</td>
+            <td>{{ new_dict2[key] }}</td> 
+            </tr>
+            {% endfor %}
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+<script>
+
+  function blink_text() {
+    $('.blink-text').fadeOut(500);
+    $('.blink-text').fadeIn(500);
+}
+setInterval(blink_text, 1000);
+
+</script>
 <script>
     const options = {
         legend: {display: true},
@@ -114,91 +200,7 @@
 
 });
 
-</script><br>
-  
-<!-- CREATE CHART FOR RISK AND RETURN ANALYSIS  --> 
-
-<form id="r-form">
-  <h3>Risk and Return Analysis</h3>
-  <input type="submit" value="View Chart" id="risk-analysis-submit"> 
-</form><br>
-
-<div class="Risk and Return">
-    <canvas id="lineC"></canvas>
-    <div id="rLegend" class="r-legend"></div>
-</div><br><br>
-
-<b>{{ max1 }} HAS THE HIGHEST RISK</b> &nbsp;&nbsp;&nbsp;
-
-<span class="blink1">SELL {{ max1 }}</span>
-
-<script>
-
-  function blink_text() {
-    $('.blink1').fadeOut(500);
-    $('.blink1').fadeIn(500);
-}
-setInterval(blink_text, 1000);
-
-</script><br>
-
-<div class="col-8">
-  <table class="table table-striped">
-  <thead>
-    <tr class="bg-danger">
-      <th scope="col">Ticker Name</th>
-      <th scope="col">Risk Rate</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for key in new_dict1 %}  
-    <tr class="table-danger">
-    <td>{{ key }}</td>
-    <td>{{ new_dict1[key] }}</td> 
-    </tr>
-    {% endfor %}
-
-  </tbody>
-</table><br>
-      
-</div>
-
-<b>{{ max2 }} HAS THE HIGHEST RETURN</b> &nbsp;&nbsp;&nbsp;
-
-<span class="blink2">BUY {{ max2 }}</span>
-
-<script>
-
-  function blink_text() {
-    $('.blink2').fadeOut(500);
-    $('.blink2').fadeIn(500);
-}
-setInterval(blink_text, 1000);
-
 </script>
-
-<div class="col-8">
-  <table class="table table-striped">
-  <thead>
-    <tr class="bg-success">
-      <th scope="col">Ticker Name</th>
-      <th scope="col">Return Rate</th>
-     
-    </tr>
-  </thead>
-  <tbody>
-    {% for key in new_dict2 %}  
-    <tr class="table-success">
-    <td>{{ key }}</td>
-    <td>{{ new_dict2[key] }}</td> 
-    </tr>
-    {% endfor %}
-
-  </tbody>
-</table>
-      
-</div><br><br>
-
 <script>
   
     // Make donut chart for risk comparison 
@@ -259,7 +261,7 @@ setInterval(blink_text, 1000);
   });
 
 
-</script><br><br><br>
+</script>
 
 {% endblock %}
 
