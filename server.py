@@ -146,6 +146,7 @@ def login_process():
         else: 
 
             session["user_id"] = user.user_id
+           
 
             flash("Logged in!")
             return redirect("/user_stock")
@@ -160,7 +161,7 @@ def logout():
     """Create logout"""
     del session["user_id"]
     flash("Logged Out.")
-    return redirect("/charts")
+    return redirect("/")
 
 
 @app.route("/add_portfolio", methods=['POST'])

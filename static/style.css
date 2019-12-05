@@ -15,3 +15,12 @@
     color: green;
     font-weight:bold;
 }
+
+.navbar-light .navbar-brand {
+    color: #adb5bd;
+    font-size: 30;
+}
+
+.navbar-light .navbar-nav .active>.nav-link, .navbar-light .navbar-nav .nav-link.active, .navbar-light .navbar-nav .nav-link.show, .navbar-light .navbar-nav .show>.nav-link {
+    color: #adb5bd;
+}
