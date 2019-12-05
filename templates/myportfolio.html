@@ -45,7 +45,7 @@
           </tbody>
         </table>
       </div>
-    </div>
+    </div><br><br>
 
     <div class="row">
       <div class="col">
@@ -73,7 +73,7 @@
         <form id="r-form">
           <h3>Risk and Return Analysis</h3>
           <input type="submit" value="View Chart" id="risk-analysis-submit"> 
-        </form>
+        </form><br>
 
         <div class="Risk and Return">
           <canvas id="lineC"></canvas>
@@ -87,7 +87,7 @@
         <!-- CREATE HIGHEST RISK AND RETURN TABLE  -->
         <div class="table-title">
           <b class="mr-3">{{ max1 }} HAS THE HIGHEST RISK</b>
-          <span class="blink-text blink1">SELL {{ max1 }}</span>
+          <span class="blink1">SELL {{ max1 }}</span>
         </div>
 
         <table class="table table-striped">
@@ -111,7 +111,7 @@
       <div class="col">
         <div class="table-title">
           <b class="mr-3">{{ max2 }} HAS THE HIGHEST RETURN</b>
-          <span class="blink-text blink2">BUY {{ max2 }}</span>
+          <span class="blink2">BUY {{ max2 }}</span>
         </div>
 
         <table class="table table-striped">
@@ -137,10 +137,18 @@
   </div>
 
 <script>
+   function blink_text() {
+    $(".blink1").fadeOut(500);
+    $(".blink1").fadeIn(500);
+}
+setInterval(blink_text, 1000);
+</script>
+
+<script>
 
   function blink_text() {
-    $('.blink-text').fadeOut(500);
-    $('.blink-text').fadeIn(500);
+    $(".blink2").fadeOut(500);
+    $(".blink2").fadeIn(500);
 }
 setInterval(blink_text, 1000);
 
@@ -201,7 +209,9 @@ setInterval(blink_text, 1000);
 });
 
 </script>
-<script>
+<br>
+<br>
+<script> 
   
     // Make donut chart for risk comparison 
     const ctx_d = $("#lineC").get(0).getContext("2d");
@@ -262,6 +272,8 @@ setInterval(blink_text, 1000);
 
 
 </script>
+<br>
+<br>
 
 {% endblock %}
 

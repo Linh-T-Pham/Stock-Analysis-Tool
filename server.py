@@ -132,20 +132,28 @@ def login_process():
     email = request.form["email"]
     password = request.form["password"]
   
-    user = User.query.filter_by(email=email).first()
+    try: 
+        user = User.query.filter_by(email=email).one()
 
-    if not user:
-        flash("No such users")
-        return redirect("/login")
+        if not user:
+            flash("No such users")
+            return redirect("/login")
 
-    if user.password != password:
-        flash("Incorrect password")
-        return redirect("/login")
+        if user.password != password:
+            flash("Incorrect password")
+            return redirect("/login")
 
-    session["user_id"] = user.user_id
+        else: 
 
-    flash("Logged in")
-    return redirect("/add_stock")
+            session["user_id"] = user.user_id
+
+            flash("Logged in!")
+            return redirect("/user_stock")
+
+    except NoReultFound:
+        flash("Login Failed!, invalid Email or password")
+        return redirect('/register')
+
 
 @app.route("/logout")
 def logout():
@@ -153,6 +161,7 @@ def logout():
     del session["user_id"]
     flash("Logged Out.")
     return redirect("/charts")
+
 
 @app.route("/add_portfolio", methods=['POST'])
 def add_to_profolio():
