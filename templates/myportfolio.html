@@ -45,7 +45,7 @@
           </tbody>
         </table>
       </div>
-    </div><br><br>
+    </div>
 
     <div class="row">
       <div class="col">
@@ -57,7 +57,7 @@
             <lable for="ticker2">Enter Second Ticker:</lable>
             <input id="ticker2" type="text" name="ticker2">
             <input type="submit" value="View Chart" id="ticker-submit">  
-        </form>
+        </form><br>
 
         <div class="Correlation">
           <canvas id="ScatterPlot"></canvas>
@@ -69,7 +69,7 @@
     <div class="row">
       <div class="col">
         <!-- CREATE CHART FOR RISK AND RETURN ANALYSIS  --> 
-
+        <br><br>
         <form id="r-form">
           <h3>Risk and Return Analysis</h3>
           <input type="submit" value="View Chart" id="risk-analysis-submit"> 
@@ -80,7 +80,7 @@
           <div id="rLegend" class="r-legend"></div>
         </div>
       </div>
-    </div>
+    </div><br><br>
 
     <div class="row">
       <div class="col">
@@ -209,13 +209,11 @@ setInterval(blink_text, 1000);
 });
 
 </script>
-<br>
-<br>
+
 <script> 
   
     // Make donut chart for risk comparison 
     const ctx_d = $("#lineC").get(0).getContext("2d");
-
 
     $("#risk-analysis-submit").on("click", (evt) => {
       evt.preventDefault();
@@ -270,10 +268,7 @@ setInterval(blink_text, 1000);
 
   });
 
-
 </script>
-<br>
-<br>
 
 {% endblock %}
 
