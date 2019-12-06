@@ -25,6 +25,7 @@
               <th scope="col">52wk High</th>
               <th scope="col">52wk Low</th>
               <th scope="col">PE Ratio</th>
+              <th scope="col">Delete Stock</th>
             </tr>
           </thead>
           <tbody>
@@ -39,7 +40,9 @@
               <td>${{ each_ticker.week52High }}</td>
               <td>${{ each_ticker.week52Low }}</td>
               <td>{{ each_ticker.peRatio }}</td>
-
+              <form action= "/delete"><input type="hidden" value="{{ each_ticker.symbol }}">
+              <td><button type="button" onclick="alert('DELETED!')"><i class="fa fa-trash" style="font-size:24px"></button></td></i>
+            </form>
             </tr>
              {% endfor %}
           </tbody>

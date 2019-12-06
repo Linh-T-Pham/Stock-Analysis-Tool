@@ -239,6 +239,16 @@ def add_stock():
                             max1 = max1,
                             max2 = max2)
 
+@app.route("/delete")
+def delete_stock():
+
+    delete_item = User_Company.query.filter_by(ticker='each_ticker.symbol').first()
+    session.delete(delete_item)
+    session.commit()
+
+    return redirect('/user_stock')
+
+
 @app.route("/user_portfolio")
 def go_to_portfolio():
 
