@@ -8,6 +8,12 @@
     <title> My dashboard</title>
 </head>
 <body>
+<style>
+  body{
+    background-color: #FDFEFE;
+  }
+</style>
+
   <div class="container">
     <div class="row">
       <div class="col">
@@ -40,9 +46,12 @@
               <td>${{ each_ticker.week52High }}</td>
               <td>${{ each_ticker.week52Low }}</td>
               <td>{{ each_ticker.peRatio }}</td>
-              <form action= "/delete"><input type="hidden" value="{{ each_ticker.symbol }}">
-              <td><button type="button" onclick="alert('DELETED!')"><i class="fa fa-trash" style="font-size:24px"></button></td></i>
-            </form>
+              
+              <form action= "/delete" method="POST"><input type="hidden" name ="delete_ticker" value="{{ each_ticker.symbol }}">
+              <td><button type="button" onclick="alert('Do you really want to delete this ticker?')"><i class="fa fa-trash" style="font-size:24px">
+              </button></td>
+      
+             </form>
             </tr>
              {% endfor %}
           </tbody>

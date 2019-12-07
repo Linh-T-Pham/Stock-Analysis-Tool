@@ -24,9 +24,12 @@ def get_company_info():
     """Make the search box active and help users look for company info"""
 
     ticker = request.args.get('ticker')
+    try: 
+        api_request = requests.get("https://cloud.iexapis.com/stable/stock/"+ ticker + "/company/quote?token=pk_ab6548b1284345368ccec6e806e70415")
+        ticker_api = api_request.json()
 
-    api_request = requests.get("https://cloud.iexapis.com/stable/stock/"+ ticker + "/company/quote?token=pk_ab6548b1284345368ccec6e806e70415")
-    ticker_api = api_request.json()
+    except:
+        print("Invalid Company Name")
 
     return render_template("comp_info.html", ticker=ticker, ticker_api = ticker_api)
 
@@ -175,6 +178,7 @@ def add_to_profolio():
     if not user_id:
         return redirect("/login")
 
+
     new_ticker = User_Company(ticker=ticker, user_id=user_id)
 
     db.session.add(new_ticker)
@@ -182,7 +186,6 @@ def add_to_profolio():
 
     user = User.query.get(user_id)
 
-    # return render_template("myportfolio.html", companies=user.companies)
     return redirect("/user_stock")
 
 @app.route("/user_stock")
@@ -239,12 +242,13 @@ def add_stock():
                             max1 = max1,
                             max2 = max2)
 
-@app.route("/delete")
+@app.route("/delete", methods=['POST'])
 def delete_stock():
 
-    delete_item = User_Company.query.filter_by(ticker='each_ticker.symbol').first()
-    session.delete(delete_item)
-    session.commit()
+    item = request.form.get("delete_ticker")
+    delete_item = User_Company.query.filter_by(ticker=item).first()
+    db.session.delete(delete_item)
+    db.session.commit()
 
     return redirect('/user_stock')
 
