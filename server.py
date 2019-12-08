@@ -24,12 +24,11 @@ def get_company_info():
     """Make the search box active and help users look for company info"""
 
     ticker = request.args.get('ticker')
-    try: 
-        api_request = requests.get("https://cloud.iexapis.com/stable/stock/"+ ticker + "/company/quote?token=pk_ab6548b1284345368ccec6e806e70415")
-        ticker_api = api_request.json()
+  
+    api_request = requests.get("https://cloud.iexapis.com/stable/stock/"+ ticker + "/company/quote?token=pk_ab6548b1284345368ccec6e806e70415")
+    ticker_api = api_request.json()
 
-    except:
-        print("Invalid Company Name")
+ 
 
     return render_template("comp_info.html", ticker=ticker, ticker_api = ticker_api)
 
@@ -126,7 +125,7 @@ def register_create():
     db.session.add(new_user)
     db.session.commit()
 
-    return redirect("/login")
+    return redirect("/")
 
 @app.route("/login", methods=["POST"])
 def login_process():
@@ -242,15 +241,15 @@ def add_stock():
                             max1 = max1,
                             max2 = max2)
 
-@app.route("/delete", methods=['POST'])
-def delete_stock():
+# @app.route("/delete", methods=['POST'])
+# def delete_stock():
 
-    item = request.form.get("delete_ticker")
-    delete_item = User_Company.query.filter_by(ticker=item).first()
-    db.session.delete(delete_item)
-    db.session.commit()
+#     item = request.form.get("delete_ticker")
+#     delete_item = User_Company.query.filter_by(ticker=item).first()
+#     db.session.delete(delete_item)
+#     db.session.commit()
 
-    return redirect('/user_stock')
+#     return redirect('/user_stock')
 
 
 @app.route("/user_portfolio")
@@ -268,8 +267,8 @@ def analyze_corr():
 
     #set the time frame to fetch stock data
     
-    start = dt.datetime(2019, 10, 26)
-    end = dt.datetime(2019, 11, 23)
+    start = dt.datetime(2019, 11, 7)
+    end = dt.datetime(2019, 12, 7)
 
     df1 = pan.DataReader(ticker1, 'av-daily', start, end, 
         api_key="pk_ab6548b1284345368ccec6e806e70415")['close']
@@ -294,7 +293,7 @@ def analyze_corr():
                 "data": []}
    
     for d1, per1 in ticker1_dict.items():
-        if d1 != "2019-10-28":
+        if d1 != '2019-11-07':
             dataset1["data"].append({"x":d1, "y":per1})
     
     datasets.append(dataset1)
@@ -311,7 +310,7 @@ def analyze_corr():
                 }
     
     for d2, per2 in ticker2_dict.items():
-        if d2 != "2019-10-28":
+        if d2 != '2019-11-07':
             dataset2["data"].append({"x":d2, "y":per2})
 
     datasets.append(dataset2)
@@ -372,6 +371,7 @@ def create_risk_return():
             "showLine":False,
             "borderColor": "blue",
             "pointRadius": 7,
+            "pointBackgroundColor": "aqua",
             "data": data_list
         }]
 
@@ -418,7 +418,7 @@ def lookup_ticker():
 if __name__ == "__main__":
 
     # Do not debug for demo
-    app.debug = True
+    app.debug = False
 
     connect_to_db(app)
 
