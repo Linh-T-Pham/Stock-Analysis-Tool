@@ -12,13 +12,13 @@ Stocks Analysis provides an analysis tool which helps users to analyze stocks mo
 - Ticker lookup
 - Company Information 
 
-This web-app is built on a Flask server with Postgres SQL database with SQLAlchmey as the ORM. The front end templating uses Jinja2.The HTML is buit using Bootstrap. Javascript uses AJAX and JSON to interact with the backend. Four different graphs are renderd using Charts JS. Database and server routes are tested using the Python uniitest. 
+This web-app is built on a Flask server with Postgres SQL database with SQLAlchmey as the ORM. The front end templating uses Jinja2.The HTML is buit using Bootstrap. Javascript uses AJAX and JSON to interact with the backend. Four different graphs are renderd using Charts JS. Database and server routes are tested using the Python unittest. 
 
 ## Tech Stack 
 
-Backend: Python, Flask, SQLAlchemy, PostgreSQL, Python unittest module 
-Frontend: Javascript, AJAX, JSON, Bootstrap, Charts.JS, HTML, CSS, JQuery, Jinja2, Flask 
-APIs: Alphadvantage, iexcloud 
+###Backend: Python, Flask, SQLAlchemy, PostgreSQL, Python unittest module 
+###Frontend: Javascript, AJAX, JSON, Bootstrap, Charts.JS, HTML, CSS, JQuery, Jinja2, Flask 
+###APIs: Alphadvantage, iexcloud 
 
 ## Future Features
 
