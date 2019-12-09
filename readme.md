@@ -1,7 +1,7 @@
 # Stocks Analysis 
 
 ## Description
-Stocks Analysis provides an analysis tool which helps users to analyze stocks more quickly and esily. Users can analyze the daily stock prices,the risk and return and how daily prices between competitive stocks correlate with one another in their porfolios.Below is a summary of all features in the web app. 
+Stocks Analysis provides an analysis tool which helps users to analyze stocks more quickly and easily. Users can analyze the daily stock prices,the risk and return and how daily prices between competitive stocks correlate with one another in their porfolios.Below is a summary of all features in the web app. 
 
 - Correlation Analysis 
 - Risk and Return Analysis 
