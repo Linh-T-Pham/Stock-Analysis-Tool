@@ -201,45 +201,49 @@ def add_stock():
         api = requests.get("https://cloud.iexapis.com/stable/stock/"+ each_ticker.ticker +"/quote?token=pk_ab6548b1284345368ccec6e806e70415")   
         ticker_api = api.json()
         response_list.append(ticker_api)
+
+    try: 
     
-    start = dt.datetime(2019, 11, 10)
-    end = dt.datetime(2019, 11, 26)
+        start = dt.datetime(2019, 11, 10)
+        end = dt.datetime(2019, 11, 26)
     
-    reTurn_list = []
-    risk_list =[]
-    ticker_list = []
+        reTurn_list = []
+        risk_list =[]
+        ticker_list = []
 
-    for each_ticker in tickers:
-        df = pan.DataReader(each_ticker.ticker, 'av-daily', start, end, 
-        api_key="pk_ab6548b1284345368ccec6e806e70415")['close']
+        for each_ticker in tickers:
+            df = pan.DataReader(each_ticker.ticker, 'av-daily', start, end, 
+            api_key="pk_ab6548b1284345368ccec6e806e70415")['close']
 
-        per_ticker = df.pct_change()
+            per_ticker = df.pct_change()
         
-        reTurn = round(per_ticker.mean(),5)
-        reTurn_list.append(reTurn)
+            reTurn = round(per_ticker.mean(),5)
+            reTurn_list.append(reTurn)
 
-        max_ReTurn= max(reTurn_list)
+            max_ReTurn= max(reTurn_list)
         
-        risk = round(per_ticker.std(),5)
-        risk_list.append(risk)
+            risk = round(per_ticker.std(),5)
+            risk_list.append(risk)
 
-        max_risk= max(risk_list)    
-        ticker_list.append(each_ticker.ticker)
+            max_risk= max(risk_list)    
+            ticker_list.append(each_ticker.ticker)
 
-    new_dict1 = dict(zip(ticker_list, risk_list))
-    max1 = max(new_dict1, key=new_dict1.get)
+        new_dict1 = dict(zip(ticker_list, risk_list))
+        max1 = max(new_dict1, key=new_dict1.get)
 
-    new_dict2 = dict(zip(ticker_list, reTurn_list))
-    max2 = max(new_dict2, key=new_dict2.get)
+        new_dict2 = dict(zip(ticker_list, reTurn_list))
+        max2 = max(new_dict2, key=new_dict2.get)
 
 
-
-    return render_template("myportfolio.html",
+        return render_template("myportfolio.html",
                             ticker_data=response_list,
                             new_dict2=new_dict2,
                             new_dict1=new_dict1,
                             max1 = max1,
                             max2 = max2)
+
+    except RemoteDataError:
+        return redirect("/")
 
 @app.route("/delete", methods=['POST'])
 def delete_stock():
@@ -418,7 +422,7 @@ def lookup_ticker():
 if __name__ == "__main__":
 
     # Do not debug for demo
-    app.debug = False
+    app.debug = True
 
     connect_to_db(app)
 
