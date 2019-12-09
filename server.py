@@ -241,15 +241,15 @@ def add_stock():
                             max1 = max1,
                             max2 = max2)
 
-# @app.route("/delete", methods=['POST'])
-# def delete_stock():
+@app.route("/delete", methods=['POST'])
+def delete_stock():
 
-#     item = request.form.get("delete_ticker")
-#     delete_item = User_Company.query.filter_by(ticker=item).first()
-#     db.session.delete(delete_item)
-#     db.session.commit()
+    item = request.form.get("delete_ticker")
+    delete_item = User_Company.query.filter_by(ticker=item).first()
+    db.session.delete(delete_item)
+    db.session.commit()
 
-#     return redirect('/user_stock')
+    return redirect('/user_stock')
 
 
 @app.route("/user_portfolio")
