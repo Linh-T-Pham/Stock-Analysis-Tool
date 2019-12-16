@@ -1,4 +1,4 @@
-
+<a href="https://imgflip.com/gif/3jl1vz"><img src="https://i.imgflip.com/3jl1vz.gif" title="made at imgflip.com"/></a>
 
 # Stocks Analysis 
 
