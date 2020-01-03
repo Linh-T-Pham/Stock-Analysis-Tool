@@ -1,7 +1,13 @@
-# Stocks Analysis 
+# Stock Analysis 
+
+## Final Project Screencast 
+
+
+[![Final Project Screencast](https://i.imgur.com/1aLX0P8.png)](https://youtu.be/wwDwdlkuKfA)
+
 
 ## Description
-Stocks Analysis provides an analysis tool which helps users to analyze stocks data more quickly and easily. Users can analyze the daily stock prices,the risk and return and how daily prices between competitive stocks correlate with one another in their porfolios. Below is a summary of all features in the web app. 
+Stock Analysis provides an analysis tool which helps users to analyze stocks data more quickly and easily. Users can analyze the daily stock prices,the risk and return and how daily prices between competitive stocks correlate with one another in their porfolios. Below is a summary of all features in the web app. 
 
 - Correlation Analysis 
 - Risk and Return Analysis 
@@ -25,3 +31,29 @@ This web-app is built on a Flask server with Postgres SQL database with SQLAlchm
 ## Future Features
  
  For next sprint on the project, I want to make a feature, which users can predict the stock price and they will get notifications when the prices go up or go down. 
+
+## Installation 
+
+- Clone repository 
+
+$ git clone https://github.com/thuytpham/Stock-Analysis-Tool.git
+
+- Create database
+
+$ createdb stocks
+
+- Create a Virtual Environment 
+
+$ virtualenv env
+
+- Activate virtual environment 
+
+$ source env/bin/activate
+
+- Install dependencies 
+
+$ pip install -r requirements.txt
+
+- Run the app
+
+$ python3 server.py 
