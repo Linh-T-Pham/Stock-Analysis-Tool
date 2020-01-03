@@ -1,6 +1,6 @@
 # Stock Analysis 
 
-## Final Project Screencast 
+## Watch Final Screencast (Click on the image below)
 
 
 [![Final Project Screencast](https://i.imgur.com/1aLX0P8.png)](https://youtu.be/wwDwdlkuKfA)
@@ -30,30 +30,30 @@ This web-app is built on a Flask server with Postgres SQL database with SQLAlchm
 
 ## Future Features
  
- For next sprint on the project, I want to make a feature, which users can predict the stock price and they will get notifications when the prices go up or go down. 
+ For the future sprint on the project, I want to build a feature, which users can predict the stock prices and they will get notifications when the prices go up or go down. 
 
 ## Installation 
 
 - Clone repository 
 
-$ git clone https://github.com/thuytpham/Stock-Analysis-Tool.git
+    $ git clone https://github.com/thuytpham/Stock-Analysis-Tool.git
 
 - Create database
 
-$ createdb stocks
+    $ createdb stocks
 
 - Create a Virtual Environment 
 
-$ virtualenv env
+    $ virtualenv env
 
-- Activate virtual environment 
+- Activate the Virtual Environment 
 
-$ source env/bin/activate
+    $ source env/bin/activate
 
-- Install dependencies 
+- Install the dependencies 
 
-$ pip install -r requirements.txt
+    $ pip install -r requirements.txt
 
 - Run the app
 
-$ python3 server.py 
+    $ python3 server.py 
