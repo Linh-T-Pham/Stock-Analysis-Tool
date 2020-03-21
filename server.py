@@ -7,6 +7,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, User_Company, Company, DailyPrice
 import datetime as dt
 import json
+# import pandas
 import pandas_datareader.data as pan
 from pandas_datareader._utils import RemoteDataError
 import datetime 

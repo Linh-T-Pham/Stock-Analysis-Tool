@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
 
 
+
 db = SQLAlchemy()
 
 class User(db.Model):
@@ -134,6 +135,8 @@ if __name__ == "__main__":
     print("Connected to DB.")
 
 
+
+# psql stocks on terminal to see the database 
 
 
 
