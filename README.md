@@ -28,10 +28,6 @@ This web-app is built on a Flask server with Postgres SQL database with SQLAlchm
 
 - APIs: Alphadvantage, iexcloud 
 
-## Future Features
- 
- For the future sprint on the project, I want to build a feature, which users can predict the stock prices and they will get notifications when the prices go up or go down. 
-
 ## Installation 
 
 - Clone repository 
