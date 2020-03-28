@@ -1,4 +1,4 @@
-#!/Users/11181988/src/Final_Project/env/bin/python
+#!/Users/11181988/src/Stock-Analysis-Tool/env/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

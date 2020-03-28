@@ -4,6 +4,12 @@
 
 {% block content %}
 
+
+<!-- Udpated the link after storing the data in database. 
+On seed_data.py, change the name dict 
+with old ticker and company name to new ones. 
+Then on the terminal, run seed_data.py and call the fct load_company() -->
+
 <br>
 <!DOCTYPE html>
 <html>
@@ -22,9 +28,6 @@
         <input type="submit" value="Add To Portfolio" id="my-profolio"> 
   </div>
 </form><br>
-
-<!-- Udpated the link after storing the data in database. On seed_data.py, change the name dict 
-with old ticker and company name to new ones. Then on the terminal, run seed_data.py and call the fct load_company() -->
 <form id="chart-form">
   <select name="comp" id="comp-field" >
     <option value = ""></option>
@@ -55,6 +58,7 @@ with old ticker and company name to new ones. Then on the terminal, run seed_dat
     <option value="WMT">Wal_Mart</option>
     <option value="DIS">Walt Disney</option>
     <option value="NKE">Nike</option>
+    <option value="M">Nike</option>
    
   </select>
   <input type="submit" value="View Chart" id="ticker-submit"><br><br><br>
@@ -166,7 +170,7 @@ with old ticker and company name to new ones. Then on the terminal, run seed_dat
                   }
 
                 },
-
+                
                 ticks: {
                   frontFamily: "Roboto Mono",
                   fontColor: "#adb5bd",

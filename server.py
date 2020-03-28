@@ -1,13 +1,10 @@
 from jinja2 import StrictUndefined
-
 from flask import Flask, render_template, request, flash, redirect, session, jsonify
-
 from flask_debugtoolbar import DebugToolbarExtension
-
 from model import connect_to_db, db, User, User_Company, Company, DailyPrice
 import datetime as dt
 import json
-# import pandas
+import pandas
 import pandas_datareader.data as pan
 from pandas_datareader._utils import RemoteDataError
 import datetime 
@@ -26,11 +23,9 @@ def get_company_info():
 
     ticker = request.args.get('ticker')
   
-    api_request = requests.get("https://cloud.iexapis.com/stable/stock/"+ ticker + "/company/quote?token=pk_ab6548b1284345368ccec6e806e70415")
+    api_request = requests.get("https://cloud.iexapis.com/stable/stock/"+ ticker + 
+                                "/company/quote?token=pk_ab6548b1284345368ccec6e806e70415")
     ticker_api = api_request.json()
-
- 
-
     return render_template("comp_info.html", ticker=ticker, ticker_api = ticker_api)
 
 @app.route('/')
@@ -68,12 +63,13 @@ def get_chart():
 
 @app.route('/variation.json')
 def daily_price_variation():
+    """Calculate the daily price variation"""
 
     ticker = request.args.get('comp')
 
     tickers = DailyPrice.query.filter_by(ticker=ticker).all()
 
-    """Return daily price variation in percentage"""
+    # Return daily price variation in percentage 
     dates = []
     per_daily_price_list = []
 
@@ -109,13 +105,14 @@ def login_form():
 
 @app.route("/register", methods=["GET"])
 def register_form():
-    """login form."""
+    """register form."""
 
     return render_template("register.html")
 
 @app.route("/register", methods=["POST"])
 def register_create():
     """Users need to login"""
+
     email = request.form["email"]
     fname = request.form["firstname"]
     lname = request.form["lastname"]
@@ -125,7 +122,6 @@ def register_create():
 
     db.session.add(new_user)
     db.session.commit()
-
     return redirect("/")
 
 @app.route("/login", methods=["POST"])
@@ -152,20 +148,19 @@ def login_process():
            
 
             flash("Logged in!")
-            return redirect("/user_stock")
+            return redirect("/")
 
     except NoReultFound:
         flash("Login Failed!, invalid Email or password")
         return redirect('/register')
 
-
 @app.route("/logout")
 def logout():
-    """Create logout"""
+    """logout form"""
+
     del session["user_id"]
     flash("Logged Out.")
     return redirect("/")
-
 
 @app.route("/add_portfolio", methods=['POST'])
 def add_to_profolio():
@@ -178,14 +173,12 @@ def add_to_profolio():
     if not user_id:
         return redirect("/login")
 
-
     new_ticker = User_Company(ticker=ticker, user_id=user_id)
 
     db.session.add(new_ticker)
     db.session.commit()
 
     user = User.query.get(user_id)
-
     return redirect("/user_stock")
 
 @app.route("/user_stock")
@@ -199,7 +192,8 @@ def add_stock():
 
     for each_ticker in tickers:
 
-        api = requests.get("https://cloud.iexapis.com/stable/stock/"+ each_ticker.ticker +"/quote?token=pk_ab6548b1284345368ccec6e806e70415")   
+        api = requests.get("https://cloud.iexapis.com/stable/stock/"+ each_ticker.ticker 
+                            +"/quote?token=pk_ab6548b1284345368ccec6e806e70415")   
         ticker_api = api.json()
         response_list.append(ticker_api)
 
@@ -248,12 +242,12 @@ def add_stock():
 
 @app.route("/delete", methods=['POST'])
 def delete_stock():
+    """Delete stock method"""
 
     item = request.form.get("delete_ticker")
     delete_item = User_Company.query.filter_by(ticker=item).first()
     db.session.delete(delete_item)
     db.session.commit()
-
     return redirect('/user_stock')
 
 
@@ -264,14 +258,13 @@ def go_to_portfolio():
 
 @app.route("/correlation.json")
 def analyze_corr():
-    """Correlate two companies"""
+    """Correlation analysis between two companies"""
    
     ticker1 = request.args.get("ticker1")
     
     ticker2 = request.args.get("ticker2")
 
-    #set the time frame to fetch stock data
-    
+    #set the time frame to fetch stock data   
     start = dt.datetime(2019, 11, 7)
     end = dt.datetime(2019, 12, 7)
 
@@ -284,7 +277,7 @@ def analyze_corr():
     per_ticker1 = df1.pct_change()
     per_ticker2 = df2.pct_change()
 
-    """ Convert pandas series data structure to a dict"""
+    # Convert pandas series data structure to a dict
 
     datasets = []
 
@@ -303,7 +296,6 @@ def analyze_corr():
     
     datasets.append(dataset1)
 
-
     ticker2_dict = per_ticker2.to_dict()
     dataset2 = {
                 "label": ticker2,
@@ -320,26 +312,16 @@ def analyze_corr():
 
     datasets.append(dataset2)
 
-    # for i, price in enumerate(per_ticker1.to_list()):
-    #     print(price, type(price))
-    #     if i == 0: 
-    #         print("\n\n\n\n\n\n")
-    #         continue
-    #     data.append({"x": price, "y": ticker2_list[i]})
-
-    # print(data)
-
     data_dict = {
         "datasets": datasets
     }
-    print(data_dict)
-    
+    print(data_dict) 
     return jsonify(data_dict)
 
 @app.route("/risk_return_analysis.json")
 def create_risk_return():
-
     """Pull all tickers for that user"""
+
     user = User.query.get(session['user_id'])
     tickers = user.companies
     
@@ -354,7 +336,6 @@ def create_risk_return():
     for each_ticker in tickers:
         df = pan.DataReader(each_ticker.ticker, 'av-daily', start, end, 
         api_key="pk_ab6548b1284345368ccec6e806e70415")['close']
-
 
         per_ticker = df.pct_change()
         
@@ -405,7 +386,6 @@ def create_sector():
     ]
 
     highest_p = max(list_p)
-
     return render_template("sector.html", sector_p = sector_p, highest_p=highest_p)
 
 @app.route("/ticker_lookup")
@@ -414,9 +394,10 @@ def lookup_ticker():
 
     key_word = request.args.get('name')
 
-    api_name = requests.get("https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords="+ str(key_word) +"&apikey=pk_ab6548b1284345368ccec6e806e70415")   
-    name_api = api_name.json()
+    api_name = requests.get("https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords="+ 
+                            str(key_word) +"&apikey=pk_ab6548b1284345368ccec6e806e70415")   
     
+    name_api = api_name.json()   
     return render_template("ticker_lookup.html", name_api=name_api)
 
 

@@ -2,7 +2,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
 
 
-
 db = SQLAlchemy()
 
 class User(db.Model):
@@ -94,24 +93,21 @@ def example_data():
     Company.query.delete()
 
     #sample users
-
     user1 = User(user_id=1, fname="Nikki", lname="test", email='12@test.com', password="password")
     user2 = User(user_id=2, fname="Nina", lname="test", email='34@test.com', password="password")
     user3 = User(user_id=3, fname="Pauline", lname="test", email='56@test.com', password="password")
     db.session.add_all([user1, user2, user3])
     db.session.commit()
+    
     #sample companies
-
     company1 = Company(ticker="FIT", name="Fitbit")
     company2 = Company(ticker="PINS",name="Pinterest")
 
     # sample user_companies
-
     user_company1 = User_Company(user_comp_id=1, user_id=1, ticker="FIT")
     user_company2 = User_Company(user_comp_id=2, user_id=2, ticker="PINS")
 
     # Add all to sesson and commit
-
     db.session.add_all([user1, user2 ,user3, company1, company2, user_company1, user_company2])
     db.session.commit()
 
@@ -135,8 +131,6 @@ if __name__ == "__main__":
     print("Connected to DB.")
 
 
-
-# psql stocks on terminal to see the database 
 
 
 
