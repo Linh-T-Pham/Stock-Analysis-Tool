@@ -28,7 +28,10 @@ This web-app is built on a Flask server with Postgres SQL database with SQLAlchm
 
 - APIs: Alphadvantage, iexcloud 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3b059813429ec48d1c9491d5063fc6023b55ae25
 ## Installation 
 
 - Clone repository 

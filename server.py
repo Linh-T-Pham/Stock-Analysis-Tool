@@ -122,6 +122,8 @@ def register_create():
 
     db.session.add(new_user)
     db.session.commit()
+
+    flash('Registration successful! Please login.')
     return redirect("/")
 
 @app.route("/login", methods=["POST"])
@@ -240,15 +242,15 @@ def add_stock():
     except RemoteDataError:
         return redirect("/")
 
-@app.route("/delete", methods=['POST'])
-def delete_stock():
-    """Delete stock method"""
+# @app.route("/delete", methods=['POST'])
+# def delete_stock():
+#     """Delete stock method"""
 
-    item = request.form.get("delete_ticker")
-    delete_item = User_Company.query.filter_by(ticker=item).first()
-    db.session.delete(delete_item)
-    db.session.commit()
-    return redirect('/user_stock')
+#     item = request.form.get("delete_ticker")
+#     delete_item = User_Company.query.filter_by(ticker=item).first()
+#     db.session.delete(delete_item)
+#     db.session.commit()
+#     return redirect('/user_stock')
 
 
 @app.route("/user_portfolio")
