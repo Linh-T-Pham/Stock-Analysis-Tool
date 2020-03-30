@@ -9,36 +9,36 @@
 <!DOCTYPE html>
 <html>
 <head>
+<div class="container col-4 my-2">
+    <font
+    color="white">
+    <h1>Ticker Lookup</h1>
+    </font>
 
-<font
-color="white">
-<h1>Ticker Lookup</h1>
+    <form action="/ticker_lookup">
+        <input type="text" name="name" size ="40" placeholder="Enter a company name">
+        <input type="submit" value="Search" ><br><br>
+    </form>
+<div>
 
-</font>
-
-<form action="/ticker_lookup">
-  <input type="text" name="name" placeholder="Enter a company name">
-  <input type="submit" value="Search"><br><br>
-</form>
 <body>
-
-<style>
-  body{
-    background-color: #4a4a4a;
-  }
-</style>
+    <style>
+        body{
+            background-color: #4a4a4a;
+    </style>
 
 
 {% for comp in name_api['bestMatches'] %}
 
-<ul>  
 <font
 color="white">     
 <li>Ticker: {{ comp["1. symbol"] }}</li>
 Company Name: {{ comp["2. name"] }}<br>
-Region: {{ comp["4. region"] }}<br>
-</font>
-</ul>
+Region: {{ comp["4. region"] }}<br><br/>
+</font>   
+
+
+
 
 
 
