@@ -406,7 +406,7 @@ def lookup_ticker():
 if __name__ == "__main__":
 
     # Do not debug for demo
-    app.debug = True
+    app.debug = False
 
     connect_to_db(app)
 
