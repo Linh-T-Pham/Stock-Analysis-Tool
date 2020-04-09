@@ -1,5 +1,7 @@
 # Stock Analysis 
 
+## Deployed on AWS http://54.185.214.209/
+
 ## Watch Final Screencast (Click on the image below)
 
 
