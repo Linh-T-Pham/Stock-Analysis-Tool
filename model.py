@@ -1,7 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
-from flask_login import UserMixin 
-from flask_bcrypt import Bcrypt 
+
 
 
 db = SQLAlchemy()
@@ -26,23 +25,6 @@ class User(db.Model):
         """Provide user's information in a helpful format"""
 
         return f"<User user_id={self.user_id} first_name={self.fname} last_name={self.lname}>"
-
-    def __init__(self, email, password):
-        """Intialize a user"""
-
-        password = bcrypt.generate_password_hash(password)
-        super().__init__(email=email, password=password)
-
-    def get_id(self):
-        """Override UserMixin.get_id."""
-
-        return self.email 
-
-    def check_password(self, password):
-        """Validate a password.
-
-        Return: True if password matches users's hashed password"""
-        return bcrypt.check_password_hash(self.password, password)
 
 
 class Company(db.Model):
