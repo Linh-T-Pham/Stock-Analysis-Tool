@@ -41,7 +41,7 @@ def add_stock_to_port():
 @app.route('/chart.json')
 def get_chart():
    
-    ticker = request.args.get('comp')
+    ticker = request.args.get('comp') # args is for finding GET parameters 
  
     tickers = DailyPrice.query.filter_by(ticker=ticker).all()
   
@@ -113,18 +113,18 @@ def register_form():
 def register_create():
     """Users need to login"""
 
-    email = request.form["email"]
     fname = request.form["firstname"]
-    lname = request.form["lastname"]
+    lname = request.form["lastname"]  
+    email = request.form["email"]
     password = request.form["password"]
 
-    new_user = User(email=email, fname=fname, lname=lname, password=password)
+    new_user = User(fname=fname, lname=lname, email=email, password=password)
 
     db.session.add(new_user)
     db.session.commit()
 
     flash('Registration successful! Please login.')
-    return redirect("/")
+    return redirect("/login")
 
 @app.route("/login", methods=["POST"])
 def login_process():
@@ -168,7 +168,7 @@ def logout():
 def add_to_profolio():
     """Users enter a ticker on the chart page and add it to their portfolio"""
     
-    ticker = request.form["ticker"]
+    ticker = request.form["ticker"]  # is for finding POST parameters 
 
     user_id = session.get("user_id")
 

@@ -17,14 +17,12 @@ def load_company():
 
                  }
               
-
     for ticker, name in name_dict.items():
         company = Company(ticker=ticker, name=name)
 
         db.session.add(company)
 
         data_by_ticker = get_ticker_data(ticker)
-
 
         for date, value in data_by_ticker.items():
             if date >= "2018-08-30":
